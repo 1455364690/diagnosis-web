@@ -3,7 +3,8 @@ import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import HomePage from "@/components/home-page/HomePage";
 import Trace from "@/components/trace/Trace";
-
+import UserDiagnosis from "@/components/user-diagnosis/UserDiagnosis";
+import MethodDiagnosis from "@/components/method-diagnosis/MethodDiagnosis";
 Vue.use(Router)
 
 export default new Router({
@@ -17,6 +18,16 @@ export default new Router({
       path: '/trace',
       name: 'Trace',
       component: Trace
+    },
+    {
+      path: '/user_diagnosis',
+      name: 'UserDiagnosis',
+      component: UserDiagnosis
+    },
+    {
+      path: '/method_diagnosis',
+      name: 'MethodDiagnosis',
+      component: MethodDiagnosis
     }
   ]
 })

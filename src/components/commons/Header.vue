@@ -15,8 +15,17 @@
             <el-link :underline="false">用户行为追踪</el-link>
           </router-link>
         </el-menu-item>
-        <el-menu-item index="2" disabled>用户异常行为诊断</el-menu-item>
-        <el-menu-item index="3" disabled>方法异常诊断</el-menu-item>
+        <el-menu-item index="2">
+          <router-link :to="{ name: 'UserDiagnosis'}">
+            <el-link :underline="false">用户异常行为诊断</el-link>
+          </router-link>
+        </el-menu-item>
+        <el-menu-item index="3">
+          <router-link :to="{ name: 'MethodDiagnosis'}">
+            <el-link :underline="false">方法异常诊断</el-link>
+          </router-link>
+
+        </el-menu-item>
       </el-menu>
     </div>
   </nav>

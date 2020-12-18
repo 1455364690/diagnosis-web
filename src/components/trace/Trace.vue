@@ -69,13 +69,17 @@
       </el-col>
       <el-col :span="6">
         <div class="grid-content bg-purple-light">
-          <el-row :gutter="10" style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);border-radius: 4px" v-for="(item,index) in methodInfoList" :command="item" :key="index"  type="flex" class="row-bg" justify="space-between">
+          <el-row :gutter="10" style="margin-top: 1px;box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .1);border-radius: 4px" v-for="(item,index) in methodInfoList" :command="item" :key="index"  type="flex" class="row-bg" justify="space-between">
             <el-col :span="24">
               <el-row :gutter="10" style="margin-bottom: 5px">
-                <el-col :span="24" style="color: #409EFF">{{item.class_method}}</el-col>
+                <el-col v-if="item.is_matched" :span="24" style="color: #409EFF">{{item.class_method}}</el-col>
+                <el-col v-if="!item.is_matched" :span="24" style="color: #F56C6C">{{item.class_method}}</el-col>
               </el-row>
               <el-row :gutter="10">
-                <el-col :span="3"><el-tag effect="dark" type="info" style="margin-top: 7px">{{item.consume_time}}&nbsp;ms</el-tag></el-col>
+                <el-col :span="3">
+                  <el-tag v-if="item.is_matched" effect="dark" type="info" style="margin-top: 7px">{{item.consume_time}}&nbsp;ms</el-tag>
+                  <el-tag v-if="!item.is_matched" effect="dark" type="info" style="margin-top: 7px">暂无数据</el-tag>
+                </el-col>
                 <el-col :span="21" style="color: #909399;font-size: 15px;padding-top: 10px">{{item.log_time}}</el-col>
               </el-row>
             </el-col>
