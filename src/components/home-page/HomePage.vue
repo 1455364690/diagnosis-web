@@ -15,10 +15,20 @@ export default {
   name: "HomePage",
   data() {
     return {
-      vals: {value: 'nothing'}
+      vals: {value: 'nothing'},
+      userIdList: [],
+      currentUserId: 0,
+      sessionIdList: [],
+      currentSessionId: '',
+      methodInfoList: []
     }
   },
   methods: {
+    getAllUserIdList() {
+      Http.get(Apis.USER.GET_ALL_USER_ID).then(res => {
+        this.userIdList = res
+      })
+    },
     test() {
       Http.get(Apis.USER.GET_ALL_USER_ID).then(res => {
         this.vals = res

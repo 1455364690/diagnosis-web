@@ -35,6 +35,7 @@ body{
   color: #212529;
   text-align: left;
   background-color: #fafafa;
+  font-family: "Helvetica Neue";;
 }
 
 html,body{
