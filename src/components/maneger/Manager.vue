@@ -7,43 +7,70 @@
 
       <el-col :span="20">
         <div class="grid-content" style="margin-top: 20px">
-          <div class="panel panel-default" >
-            <div class="panel-heading" style="background: rgba(153, 153, 153, 0.8); ">监控开关管理</div>
-            <div class="panel-body">
-              <el-row>
-                <div style="height: 100%;width: 100%" class="grid-content">
-                  <el-row>
-                    <el-col :span="7">
-                      <div class="grid-content bg-purple"></div>
-                    </el-col>
-                    <el-col :span="10">
-                      <div class="tip">
-                        <el-row>
-                          <el-col :span="14">
-                            <div class="grid-content bg-purple">
-                              当前监控状态：
-                              <el-tag type="success">运行中</el-tag>
-                              <el-tag type="danger">停止</el-tag>
-                            </div>
-                          </el-col>
-                          <el-col :span="10">
-                            <div class="grid-content bg-purple">
-                              <button type="button" class="btn btn-success">启动监控</button>
-                              <button type="button" class="btn btn-warning">停止监控</button>
-                            </div>
-                          </el-col>
-                        </el-row>
-                      </div>
-                    </el-col>
-                    <el-col :span="7">
-                      <div class="grid-content bg-purple"></div>
-                    </el-col>
-                  </el-row>
-                </div>
-              </el-row>
+          <el-row class="tip" style="height: 100px;padding-top: 30px">
+            <el-col :span="2">
+              <div class="grid-content bg-purple"></div>
+            </el-col>
+            <el-col :span="12">
+              <div>
+                <el-row>
+                  <el-col :span="12">
+                    <div class="grid-content bg-purple">
+                      当前监控状态：
+                      <el-tag type="success">运行中</el-tag>
+                      <el-tag type="danger">停止</el-tag>
+                    </div>
+                  </el-col>
+                  <el-col :span="10">
+                    <div class="grid-content bg-purple">
+                      <el-button type="primary" plain>启动监控</el-button>
+                      <el-button type="warning" plain>停止监控</el-button>
+                    </div>
+                  </el-col>
+                </el-row>
+              </div>
+            </el-col>
+            <el-col :span="6">
+              <div class="grid-content bg-purple"></div>
+            </el-col>
+          </el-row>
+<!--          <div class="panel panel-default" >-->
+<!--            <div class="panel-heading" style="background: rgba(153, 153, 153, 0.8); ">监控开关管理</div>-->
+<!--            <div class="panel-body">-->
+<!--              <el-row>-->
+<!--                <div style="height: 100%;width: 100%" class="grid-content">-->
+<!--                  <el-row>-->
+<!--                    <el-col :span="6">-->
+<!--                      <div class="grid-content bg-purple"></div>-->
+<!--                    </el-col>-->
+<!--                    <el-col :span="12">-->
+<!--                      <div class="tip">-->
+<!--                        <el-row>-->
+<!--                          <el-col :span="14">-->
+<!--                            <div class="grid-content bg-purple">-->
+<!--                              当前监控状态：-->
+<!--                              <el-tag type="success">运行中</el-tag>-->
+<!--                              <el-tag type="danger">停止</el-tag>-->
+<!--                            </div>-->
+<!--                          </el-col>-->
+<!--                          <el-col :span="10">-->
+<!--                            <div class="grid-content bg-purple">-->
+<!--                              <el-button type="success">启动监控</el-button>-->
+<!--                              <el-button type="danger">停止监控</el-button>-->
+<!--                            </div>-->
+<!--                          </el-col>-->
+<!--                        </el-row>-->
+<!--                      </div>-->
+<!--                    </el-col>-->
+<!--                    <el-col :span="6">-->
+<!--                      <div class="grid-content bg-purple"></div>-->
+<!--                    </el-col>-->
+<!--                  </el-row>-->
+<!--                </div>-->
+<!--              </el-row>-->
 
-            </div>
-          </div>
+<!--            </div>-->
+<!--          </div>-->
           <div class="panel panel-default">
             <div class="panel-heading" style="background: rgba(153, 153, 153, 0.8)">监控配置管理</div>
             <div class="panel-body">
@@ -53,7 +80,7 @@
                 </el-col>
                 <el-col :span="8">
                   <div class="grid-content">
-                    <button type="button" @click="showDialog()" class="btn btn-primary">修改配置项</button>
+                    <el-button type="primary" @click="showDialog()">修改配置项</el-button>
                   </div>
                 </el-col>
                 <el-col :span="5">
@@ -112,7 +139,7 @@
                 <el-col :span="20">
                   <div class="grid-content bg-purple">
                     <el-row>
-                      <button type="button" class="btn btn-primary">添加用户访问序列</button>
+                      <el-button type="primary" @click="showDialog()">添加用户访问序列</el-button>
                     </el-row>
                     <el-row>
                       <el-col :span="24">
@@ -218,13 +245,13 @@ export default {
   min-height: 36px;
 }
 
-/*.tip {*/
-/*  padding: 8px 16px;*/
-/*  background-color: #ecf8ff;*/
-/*  border-radius: 4px;*/
-/*  border-left: 5px solid #50bfff;*/
-/*  margin: 20px 0;*/
-/*}*/
+.tip {
+  padding: 8px 16px;
+  background-color: rgb(233, 233, 235);
+  border-radius: 4px;
+  border-left: 5px solid #909399;
+  margin: 20px 0;
+}
 .row-bg {
   padding: 10px 0;
   background-color: #f9fafc;
