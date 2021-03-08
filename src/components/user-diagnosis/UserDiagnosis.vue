@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <el-row :gutter="10" style="padding-top: 15px;height:51px;background: #333840">
+  <div style="width: 100%;">
+    <el-row :gutter="10" style="padding-top: 15px;">
       <el-col :span="2">
         <div class="grid-content"></div>
       </el-col>

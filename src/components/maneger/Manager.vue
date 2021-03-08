@@ -7,8 +7,8 @@
 
       <el-col :span="20">
         <div class="grid-content" style="margin-top: 20px">
-          <div class="panel panel-info">
-            <div class="panel-heading">监控开关管理</div>
+          <div class="panel panel-default" >
+            <div class="panel-heading" style="background: rgba(153, 153, 153, 0.8); ">监控开关管理</div>
             <div class="panel-body">
               <el-row>
                 <div style="height: 100%;width: 100%" class="grid-content">
@@ -44,8 +44,8 @@
 
             </div>
           </div>
-          <div class="panel panel-info">
-            <div class="panel-heading">监控配置管理</div>
+          <div class="panel panel-default">
+            <div class="panel-heading" style="background: rgba(153, 153, 153, 0.8)">监控配置管理</div>
             <div class="panel-body">
               <el-row>
                 <el-col :span="2">
@@ -66,7 +66,7 @@
                 </el-col>
                 <el-col :span="20">
                   <div class="grid-content">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-striped">
                       <thead>
                       <tr>
                         <th>#</th>
@@ -101,8 +101,8 @@
             </div>
           </div>
 
-          <div class="panel panel-info">
-            <div class="panel-heading">正常用户访问序列设置</div>
+          <div class="panel panel-default">
+            <div class="panel-heading" style="background: rgba(153, 153, 153, 0.8)">正常用户访问序列设置</div>
             <div class="panel-body">
               <el-row>
                 <el-col :span="2">
