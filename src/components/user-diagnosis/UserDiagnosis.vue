@@ -27,8 +27,33 @@
             <div class="panel-heading" style="background: rgba(153, 153, 153, 0.8)" >用户访问序列诊断结果</div>
             <div class="panel-body">
               <el-row>
-                <el-col :span="2"></el-col>
-                <el-col :span="20"></el-col>
+                <el-col :span="2">&nbsp;</el-col>
+                <el-col :span="20">
+                  <el-row>
+                    <el-collapse v-model="activeNames"
+                                 v-for="(item,index) in diagnoseResultList" :key="index">
+                      <el-collapse-item :name="index">
+                        <template slot="title">
+                          {{ item.sessionId }} - {{ item.sessionId }}
+                        </template>
+                        <div v-for="(seq,seqIndex) in item.sequence" :key="seqIndex">
+                          <div>{{ seq }}</div>
+                        </div>
+
+                      </el-collapse-item>
+                    </el-collapse>
+                  </el-row>
+                  <el-row v-if="diagnoseResultList == null || diagnoseResultList.length !== 0">
+                    <el-pagination
+                      background
+                      :page-size="currentPageSize"
+                      :current-page.sync="currentPageNum"
+                      @current-change="currentPageChange"
+                      layout="prev, pager, next"
+                      :total="methodInfoTotalNum">
+                    </el-pagination>
+                  </el-row>
+                </el-col>
                 <el-col :span="2"></el-col>
               </el-row>
             </div>
@@ -47,6 +72,7 @@ export default {
   name: "UserDiagnosis",
   data() {
     return {
+      activeNames: ['1'],
       pickerOptions: {
         shortcuts: [{
           text: '最近1小时',
@@ -74,12 +100,43 @@ export default {
           }
         }]
       },
-      value2: ''
+      value2: '',
+      currentPageSize: 10,
+      currentPageNum: 1,
+      methodInfoTotalNum: 100,
+      diagnoseResultList: [
+        {
+          userId: 'qwe',
+          sessionId: '123345',
+          sequence: ['123123', '123123123', '123123123', '123123123123'],
+          errorNumber: 0.3
+        },
+        {
+          userId: 'qwe',
+          sessionId: '123345',
+          sequence: ['123123', '123123123', '123123123', '123123123123'],
+          errorNumber: 0.3
+        },
+        {
+          userId: 'qwe',
+          sessionId: '123345',
+          sequence: ['123123', '123123123', '123123123', '123123123123'],
+          errorNumber: 0.3
+        },
+        {
+          userId: 'qwe',
+          sessionId: '123345',
+          sequence: ['123123', '123123123', '123123123', '123123123123'],
+          errorNumber: 0.3
+        }]
     }
   },
   methods: {
     startDiagnose() {
       console.log(this.value2)
+    },
+    currentPageChange(event) {
+      console.log(this.currentPageNum)
     }
   }
 }

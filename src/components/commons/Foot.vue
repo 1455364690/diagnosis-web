@@ -2,7 +2,6 @@
   <div class="footer-nav">
     <div class="container">
       <el-row style="height: 100%">
-        aaaaaaaaaaa
       </el-row>
     </div>
   </div>
@@ -17,11 +16,12 @@ export default {
 <style scoped>
 .footer-nav{
   height: 20px;
-  background:rgba(47,48,48,1);
+  /*background:rgba(47,48,48,1);*/
   color: white;
   padding: 10px 0;
   font-size: 14px;
   font-family:Source Han Sans CN;
+  margin: 0 0 0 0;
 }
 .nav-title{
   display: inline-block;

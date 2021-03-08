@@ -8,6 +8,8 @@ import 'element-ui/lib/theme-chalk/index.css';
 import 'jquery/dist/jquery.min'
 import 'bootstrap/dist/js/bootstrap.min'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import * as echarts from 'echarts'
+Vue.prototype.$echarts = echarts
 Vue.use(ElementUI);
 Vue.config.productionTip = false
 import {
