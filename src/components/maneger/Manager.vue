@@ -242,8 +242,55 @@
             <el-button @click="queryAccessSequence" size="medium" type="primary">搜&nbsp;&nbsp;索</el-button>
           </el-col>
         </el-row>
-        <el-row></el-row>
-      <el-button @click="updateMonitorConfig" size="medium" type="primary" style="margin-left: 300px;margin-top: 20px">提&nbsp;&nbsp;交</el-button>
+      <el-row>
+        <el-table
+          v-if="queryAccessSequenceList!=null && queryAccessSequenceList.length !==0"
+          ref="multipleTable"
+          :data="queryAccessSequenceList"
+          tooltip-effect="dark"
+          style="width: 100%"
+          @selection-change="handleSelectionChange">
+          <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column>
+          <el-table-column
+            type="expand"
+            width="55">
+            <template slot-scope="props">
+              <el-form label-position="left" v-for="(item,index) in props.row.sequence" :key="index" inline class="demo-table-expand">
+                <el-form-item style="height: 10px" label="访问序列：">
+                  <span>{{item}}</span>
+                </el-form-item>
+              </el-form>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="用户id"
+          >
+            <template slot-scope="scope">{{ scope.row.userId }}</template>
+          </el-table-column>
+          <el-table-column
+            label="sessionId"
+          >
+            <template slot-scope="scope">{{ scope.row.sessionId }}</template>
+          </el-table-column>
+        </el-table>
+      </el-row>
+      <el-row v-if="queryAccessSequenceList!=null && queryAccessSequenceList.length!==0">
+        <el-col :span="8"></el-col>
+        <el-pagination
+          background
+          :page-size="currentPageSize"
+          :current-page.sync="currentPageNum"
+          @current-change="currentPageChange"
+          layout="prev, pager, next"
+          :total="pageTotalNum">
+        </el-pagination>
+      </el-row>
+      <el-button v-if="multipleSelection!=null && multipleSelection.length!==0" @click="updateMonitorConfig"
+                 size="medium" type="primary" style="margin-left: 300px;margin-top: 20px">提&nbsp;&nbsp;交
+      </el-button>
     </el-dialog>
   </div>
 </template>
@@ -256,7 +303,10 @@ export default {
   name: "Manager",
   data() {
     return {
-      selectTime:'',
+      selectTime: '',
+      currentPageNum: 1,
+      currentPageSize: 15,
+      pageTotalNum: 0,
       updateMonitorConfigVisible: false,
       addNormalAccessSequenceVisible: false,
       systemRunningStatus: 1,//2:未知,1:运行中,0:停止
@@ -318,6 +368,8 @@ export default {
           }
         }]
       },
+      queryAccessSequenceList: [],
+      multipleSelection: []
     };
   },
   methods: {
@@ -329,9 +381,22 @@ export default {
     showAddNormalAccessSequenceDialog() {
       this.addNormalAccessSequenceVisible = true
     },
-    queryAccessSequence(){
+    queryAccessSequence() {
       console.log(this.queryAccessSequenceFilter)
       console.log(this.selectTime)
+      this.queryAccessSequenceList = [{
+        userId: 1,
+        sessionId: '123546',
+        sequence: ['123', '123', '123123123']
+      }, {userId: 1, sessionId: '123546', sequence: ['123', '123', '123123123']}]
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+      console.log(this.multipleSelection)
+    },
+    currentPageChange(val) {
+      this.currentPageNum = val
+      console.log(val)
     },
     startMonitor() {
       if (this.systemRunningStatus == 1) {
