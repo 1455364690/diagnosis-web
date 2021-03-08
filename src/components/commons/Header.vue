@@ -1,6 +1,6 @@
 <template>
   <nav class="header-nav">
-    <div class="container">
+    <div style="width: 100%;">
       <el-menu
         :default-active="activeIndex"
         class="el-menu-demo"
@@ -11,18 +11,23 @@
         active-text-color="#ffd04b">
         <el-menu-item index="0" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</el-menu-item>
         <el-menu-item index="1">
+          <router-link :to="{ name: 'Manager'}">
+            <el-link :underline="false">系统管理</el-link>
+          </router-link>
+        </el-menu-item>
+        <el-menu-item index="2">
           <router-link :to="{ name: 'Trace'}">
             <el-link :underline="false">用户行为追踪</el-link>
           </router-link>
         </el-menu-item>
-        <el-menu-item index="2">
+        <el-menu-item index="3">
           <router-link :to="{ name: 'UserDiagnosis'}">
-            <el-link :underline="false">用户异常行为诊断</el-link>
+            <el-link :underline="false">用户访问序列异常诊断</el-link>
           </router-link>
         </el-menu-item>
-        <el-menu-item index="3">
+        <el-menu-item index="4">
           <router-link :to="{ name: 'MethodDiagnosis'}">
-            <el-link :underline="false">方法异常诊断</el-link>
+            <el-link :underline="false">系统方法异常诊断</el-link>
           </router-link>
 
         </el-menu-item>
@@ -36,7 +41,7 @@ export default {
   name: "header-container",
   data() {
     return {
-      activeIndex: '1'
+      activeIndex: ''
     };
   },
   methods: {

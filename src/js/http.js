@@ -2,7 +2,6 @@ import axios from 'axios'
 
 const TIME_OUT_MS = 60 * 1000 // 默认请求超时时间
 //const BASE_URL = process.env.API_ROOT
-const BASE_URL = 'http://localhost:8000'
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 
 /*

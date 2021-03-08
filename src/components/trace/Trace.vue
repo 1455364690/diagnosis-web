@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div style="width: 100%;">
     <el-row :gutter="10" style="padding-top: 15px;background: #333840">
       <el-col :span="2">
         <div class="grid-content"></div>
@@ -7,7 +7,7 @@
       <el-col :span="10">
         <div class="grid-content">
           <el-row :gutter="10">
-            <el-col :span="3">
+            <el-col :span="4">
               <div class="grid-content bg-purple">
                 <el-dropdown @command="selectNode">
                 <span class="el-dropdown-link">
@@ -22,7 +22,7 @@
                 </el-dropdown>
               </div>
             </el-col>
-            <el-col :span="3">
+            <el-col :span="4">
               <div class="grid-content bg-purple">
                 <el-dropdown @command="selectUser">
                 <span class="el-dropdown-link">
@@ -37,7 +37,7 @@
                 </el-dropdown>
               </div>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="14">
               <div class="grid-content bg-purple">
                 <el-dropdown @command="selectSession">
                 <span class="el-dropdown-link">
@@ -67,7 +67,7 @@
       <el-col :span="2">
         <div class="grid-content bg-purple"></div>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="12">
         <div class="grid-content ">
           <el-row v-if="methodInfoList.length!=0" type="flex" class="row-bg" justify="space-between">
             <el-pagination
@@ -101,8 +101,11 @@
           </el-row>
         </div>
       </el-col>
-      <el-col :span="14">
+      <el-col :span="8">
         <div class="grid-content bg-purple-light">
+          <el-row class="grid-content bg-purple">
+
+          </el-row>
         </div>
       </el-col>
       <el-col :span="2">

@@ -1,9 +1,9 @@
 <template>
-  <div class="create-container">
-    home
-    <el-button type="primary" @click="test()">主要按钮</el-button>
-    <!--    <div class="container">homepages</div>-->
-    {{ vals }}
+  <div style="width: 100%;">
+<!--    home-->
+<!--    <el-button type="primary" @click="test()">主要按钮</el-button>-->
+<!--    &lt;!&ndash;    <div class="container">homepages</div>&ndash;&gt;-->
+<!--    {{ vals }}-->
   </div>
 </template>
 
