@@ -8,6 +8,12 @@ export default {
   METHOD: {
     GET_FILEBEAT_LIST_BY_SESSION_ID: 'api/get_method_list_by_session_id/{session_id}',
     GET_FILEBEAT_LIST_BY_SESSION_ID_IN_PAGE: 'api/get_method_list_by_session_id_in_page/{session_id}/{page_size}/{page_num}',
-    GET_PC_INFO_BY_SESSION_ID_AND_METHOD_ID: 'get_pc_info_by_session_id_and_method_id/{session_id}/{method_id}'
+    GET_PC_INFO_BY_SESSION_ID_AND_METHOD_ID: 'api/get_pc_info_by_session_id_and_method_id/{session_id}/{method_id}'
+  },
+  MANAGE: {
+    START_MONITOR: 'api/manage/monitor/start',
+    STOP_MONITOR: 'api/manage/monitor/stop',
+    DELETE_MONITOR_CONFIG_BY_ID: 'api/manage/delete_monitor_by_id/<monitor_id>',
+    UPDATE_MONITOR: 'api/manage/update_monitor/<monitor_id>',
   }
 }
