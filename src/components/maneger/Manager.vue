@@ -158,19 +158,42 @@
                     </el-row>
                     <el-row>
                       <el-col :span="24">
-                        <el-collapse v-model="activeNames"
-                                     v-for="(item,index) in userAccessSequenceList" :key="index">
-                          <el-collapse-item :name="index">
-                            <template slot="title">
-                              <el-button size="mini" type="danger" plain>删除</el-button>&nbsp;&nbsp;
-                              {{ item.sessionId }}
+                        <el-table
+                          v-if="userAccessSequenceList!=null && userAccessSequenceList.length !==0"
+                          ref="multipleTable"
+                          :data="userAccessSequenceList"
+                          tooltip-effect="dark"
+                          style="width: 100%"
+                          @selection-change="handleSelectionChange">
+                          <el-table-column
+                            type="expand"
+                            width="55">
+                            <template slot-scope="props">
+                              <el-form label-position="left" v-for="(item,index) in props.row.sequence" :key="index"
+                                       inline class="demo-table-expand">
+                                <el-form-item style="height: 10px" label="访问序列：">
+                                  <span>{{ item }}</span>
+                                </el-form-item>
+                              </el-form>
                             </template>
-                            <div v-for="(seq,seqIndex) in item.sequence" :key="seqIndex">
-                              <div>{{ seq }}</div>
-                            </div>
-
-                          </el-collapse-item>
-                        </el-collapse>
+                          </el-table-column>
+                          <el-table-column
+                            label="用户id"
+                          >
+                            <template slot-scope="scope">{{ scope.row.userId }}</template>
+                          </el-table-column>
+                          <el-table-column
+                            label="sessionId"
+                          >
+                            <template slot-scope="scope">{{ scope.row.sessionId }}</template>
+                          </el-table-column>
+                          <el-table-column label="操作">
+                            <template slot-scope="props">
+                              <el-button size="small" type="danger" @click="deleteMonitorConfig(props.row)" plain>删除
+                              </el-button>
+                            </template>
+                          </el-table-column>
+                        </el-table>
                       </el-col>
                     </el-row>
 
@@ -318,9 +341,10 @@ export default {
         sessionId: ''
       },
       userAccessSequenceList: [{
+        userId: '123123',
         sessionId: '1233333',
         sequence: ['123', '123123', '123123', '123123']
-      }, {sessionId: '1233333', sequence: ['123', '123123', '123123', '123123']}],
+      }, {userId: '123123', sessionId: '1233333', sequence: ['123', '123123', '123123', '123123']}],
       monitorConfigList: [{
         id: 1,
         beatName: 'filbeat',
@@ -376,7 +400,6 @@ export default {
     showUpdateMonitorConfigVisibleDialog(row) {
       this.updateMonitorConfigVisible = true
       this.monitorConfigItem = row
-      console.log(scope)
     },
     showAddNormalAccessSequenceDialog() {
       this.addNormalAccessSequenceVisible = true
@@ -398,7 +421,29 @@ export default {
       this.currentPageNum = val
       console.log(val)
     },
+    checkMessageBox(message, confirm, cancel) {
+      this.$confirm(message, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        confirm()
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+        cancel()
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
     startMonitor() {
+      this.checkMessageBox('', this.confirmStartMonitor(), this.cancel())
+    },
+    confirmStartMonitor() {
       if (this.systemRunningStatus == 1) {
         this.$message.error('启动监控失败，当前监控已启动，无法重复启动！');
         return
@@ -410,6 +455,9 @@ export default {
       })
     },
     endMonitor() {
+      this.checkMessageBox('', this.confirmEndMonitor, this.cancel)
+    },
+    confirmEndMonitor() {
       if (this.systemRunningStatus == 0) {
         this.$message.error('停止监控失败，当前监控已停止，无法重复停止！');
         return
@@ -424,11 +472,32 @@ export default {
       console.log(this.monitorConfigItem)
     },
     deleteMonitorConfig(config) {
-      console.log(this.monitorConfigItem)
+      console.log(config)
     },
     queryUserAccessByTimeRange(startTime, endTime) {
       return []
-    }
+    },
+    cancel() {
+      console.log('cancel')
+    },
+    showSuccessMessage(message){
+      this.$message({
+        message: message,
+        type: 'success'
+      });
+    },
+    showInfoMessage(message){
+      this.$message(message);
+    },
+    showErrorMessage(message){
+      this.$message.error(message);
+    },
+    showWarningMessage(message){
+      this.$message({
+        message: message,
+        type: 'warning'
+      });
+    },
   }
 }
 </script>
