@@ -130,7 +130,7 @@
                           <el-button size="mini" type="primary"
                                      @click="showUpdateMonitorConfigVisibleDialog(scope.row)">修改配置项
                           </el-button>
-                          <el-button size="mini" type="danger" @click="deleteMonitorConfig(scope.row)">删除</el-button>
+<!--                          <el-button size="mini" type="danger" @click="deleteMonitorConfig(scope.row)">删除</el-button>-->
                         </template>
                       </el-table-column>
                     </el-table>
@@ -159,9 +159,9 @@
                     <el-row>
                       <el-col :span="24">
                         <el-table
-                          v-if="userAccessSequenceList!=null && userAccessSequenceList.length !==0"
+                          v-if="normalUserAccessSequenceList!=null && normalUserAccessSequenceList.length !==0"
                           ref="multipleTable"
-                          :data="userAccessSequenceList"
+                          :data="normalUserAccessSequenceList"
                           tooltip-effect="dark"
                           style="width: 100%"
                           @selection-change="handleSelectionChange">
@@ -189,7 +189,8 @@
                           </el-table-column>
                           <el-table-column label="操作">
                             <template slot-scope="props">
-                              <el-button size="small" type="danger" @click="deleteMonitorConfig(props.row)" plain>删除
+                              <el-button size="small" type="danger" @click="deleteNormalAccessSequence(props.row)"
+                                         plain>删除
                               </el-button>
                             </template>
                           </el-table-column>
@@ -311,7 +312,7 @@
           :total="pageTotalNum">
         </el-pagination>
       </el-row>
-      <el-button v-if="multipleSelection!=null && multipleSelection.length!==0" @click="updateMonitorConfig"
+      <el-button v-if="multipleSelection!=null && multipleSelection.length!==0" @click="addNormalAccessSequence"
                  size="medium" type="primary" style="margin-left: 300px;margin-top: 20px">提&nbsp;&nbsp;交
       </el-button>
     </el-dialog>
@@ -335,12 +336,12 @@ export default {
       systemRunningStatus: 1,//2:未知,1:运行中,0:停止
       activeNames: ['1'],
       queryAccessSequenceFilter: {
-        startTime: '',
-        entTime: '',
-        userId: '',
-        sessionId: ''
+        startTime: null,
+        entTime: null,
+        userId: null,
+        sessionId: null
       },
-      userAccessSequenceList: [{
+      normalUserAccessSequenceList: [{
         userId: '123123',
         sessionId: '1233333',
         sequence: ['123', '123123', '123123', '123123']
@@ -396,23 +397,65 @@ export default {
       multipleSelection: []
     };
   },
+  mounted() {
+    // 获取监控当前状态
+    this.queryMonitorCurrentStatus()
+    // 获取监控信息
+    this.queryMonitorConfigList()
+    // 获取用户正常访问序列
+    this.queryNormalAccessSequenceList()
+  },
   methods: {
-    showUpdateMonitorConfigVisibleDialog(row) {
-      this.updateMonitorConfigVisible = true
-      this.monitorConfigItem = row
+    queryMonitorCurrentStatus() {
+      Http.get(Apis.MANAGE.GET_MONITOR_CURRENT_STATUS).then(res => {
+        this.systemRunningStatus = res.status
+      }).catch(error => {
+        this.showErrorMessage('获取当前监控状态失败:' + error)
+      })
     },
-    showAddNormalAccessSequenceDialog() {
-      this.addNormalAccessSequenceVisible = true
+    queryMonitorConfigList() {
+      Http.get(Apis.MANAGE.QUERY_MONITOR_CONFIG_LIST).then(res => {
+        this.monitorConfigList = res.data
+      }).catch(error => {
+        this.showErrorMessage('获取监控信息失败:' + error)
+      })
     },
-    queryAccessSequence() {
-      console.log(this.queryAccessSequenceFilter)
-      console.log(this.selectTime)
-      this.queryAccessSequenceList = [{
-        userId: 1,
-        sessionId: '123546',
-        sequence: ['123', '123', '123123123']
-      }, {userId: 1, sessionId: '123546', sequence: ['123', '123', '123123123']}]
+    queryNormalAccessSequenceList() {
+      Http.get(Apis.MANAGE.GET_NORMAL_ACCESS_SEQUENCE_LIST).then(res => {
+        this.normalUserAccessSequenceList = res.data
+      }).catch(error => {
+        this.showErrorMessage('获取用户正常访问序列失败')
+      })
     },
+    startMonitor() {
+      this.checkMessageBox('确认启动监控？', this.confirmStartMonitor, this.cancel)
+    },
+    confirmStartMonitor() {
+      if (this.systemRunningStatus == 1) {
+        this.showErrorMessage('启动监控失败，当前监控已启动，无法重复启动！');
+        return
+      }
+      Http.get(Apis.MANAGE.START_MONITOR).then(res => {
+        this.systemRunningStatus = res.status
+      }).catch(error => {
+
+      })
+    },
+    endMonitor() {
+      this.checkMessageBox('确认停止监控？', this.confirmEndMonitor, this.cancel)
+    },
+    confirmEndMonitor() {
+      if (this.systemRunningStatus == 0) {
+        this.showErrorMessage('停止监控失败，当前监控已停止，无法重复停止！');
+        return
+      }
+      Http.get(Apis.MANAGE.STOP_MONITOR).then(res => {
+        this.systemRunningStatus = res.status
+      }).catch(error => {
+
+      })
+    },
+
     handleSelectionChange(val) {
       this.multipleSelection = val;
       console.log(this.multipleSelection)
@@ -420,6 +463,118 @@ export default {
     currentPageChange(val) {
       this.currentPageNum = val
       console.log(val)
+      this.queryAccessSequence()
+    },
+
+    updateMonitorConfig() {
+      console.log(this.monitorConfigItem)
+      Http.post(Apis.MANAGE.UPDATE_MONITOR, this.monitorConfigItem).then(res => {
+        this.showSuccessMessage('修改成功')
+        this.queryMonitorConfigList()
+      }).catch(error => {
+        this.showErrorMessage('修改失败')
+      })
+    },
+    deleteNormalAccessSequence(config) {
+      this.$confirm('确认删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        const accessSequenceConfig = {
+          userId: config.userId,
+          sessionId: config.sessionId
+        };
+        Http.post(Apis.post(Apis.MANAGE.DELETE_SINGLE_NORMAL_ACCESS_SEQUENCE, accessSequenceConfig)).then(res => {
+          this.showSuccessMessage('删除成功')
+          this.queryNormalAccessSequenceList()
+        }).catch(error => {
+          this.showErrorMessage('正常序列删除失败')
+        })
+      }).catch(() => {
+      });
+
+    },
+    addNormalAccessSequence() {
+      console.log(this.multipleSelection)
+      Http.post(Apis.MANAGE.ADD_NORMAL_ACCESS_SEQUENCE, this.multipleSelection).then(res => {
+        this.showSuccessMessage('添加用户访问序列失败')
+        this.queryNormalAccessSequenceList()
+      }).catch(error => {
+        this.showErrorMessage('添加用户访问序列失败')
+      })
+    },
+    queryAccessSequence() {
+      const queryCondition = {
+        userId: this.queryAccessSequenceFilter.userId === '' ? null : this.queryAccessSequenceFilter.userId,
+        sessionId: this.queryAccessSequenceFilter.sessionId === '' ? null : this.queryAccessSequenceFilter.sessionId,
+        startTime: this.dateFormat(this.selectTime[0]),
+        endTime: this.dateFormat(this.selectTime[1]),
+        pageNum: this.pageNum,
+        pageSize: this.pageSize,
+        total: this.pageTotalNum
+      }
+      console.log(queryCondition)
+      Http.post(Apis.MANAGE.QUERY_ACCESS_SEQUENCE_LIST_BY_CONDITION, queryCondition).then(res => {
+        this.queryAccessSequenceList = res.data
+        this.pageNum = res.pageNum
+        this.pageSize = res.pageSize
+        this.pageTotalNum = res.total
+      }).catch(error => {
+        this.showErrorMessage('获取用户序列失败')
+      })
+
+
+      /*
+      this.queryAccessSequenceList = [{
+        userId: 1,
+        sessionId: '123546',
+        sequence: ['123', '123', '123123123']
+      }, {userId: 1, sessionId: '123546', sequence: ['123', '123', '123123123']}]
+
+       */
+    },
+
+
+    numberFormat(s) {
+      return s < 10 ? '0' + s : s
+    },
+    dateFormat(date) {
+      if (date === undefined || date == null) {
+        return null
+      }
+      date = new Date(date)
+      var resDate = date.getFullYear() + '-' + this.numberFormat(date.getMonth() + 1) + '-' + this.numberFormat(date.getDate()) + 'T' + this.numberFormat(date.getHours()) + ':' + this.numberFormat(date.getMinutes()) + ':' + this.numberFormat(date.getSeconds()) + '.000Z';
+      return resDate
+    },
+
+    showUpdateMonitorConfigVisibleDialog(row) {
+      this.updateMonitorConfigVisible = true
+      this.monitorConfigItem = row
+    },
+    showAddNormalAccessSequenceDialog() {
+      this.addNormalAccessSequenceVisible = true
+    },
+    cancel() {
+      console.log('cancel')
+    },
+    showSuccessMessage(message) {
+      this.$message({
+        message: message,
+        type: 'success'
+      });
+    },
+    showInfoMessage(message) {
+      this.$message(message);
+    },
+    showErrorMessage(message) {
+      this.$message.error(message);
+    },
+    showWarningMessage(message) {
+      this.$message({
+        message: message,
+        type: 'warning'
+      });
     },
     checkMessageBox(message, confirm, cancel) {
       this.$confirm(message, '提示', {
@@ -438,64 +593,6 @@ export default {
           type: 'info',
           message: '已取消删除'
         });
-      });
-    },
-    startMonitor() {
-      this.checkMessageBox('', this.confirmStartMonitor(), this.cancel())
-    },
-    confirmStartMonitor() {
-      if (this.systemRunningStatus == 1) {
-        this.$message.error('启动监控失败，当前监控已启动，无法重复启动！');
-        return
-      }
-      Http.get(Apis.MANAGE.START_MONITOR).then(res => {
-        this.systemRunningStatus = 1
-      }).catch(error => {
-
-      })
-    },
-    endMonitor() {
-      this.checkMessageBox('', this.confirmEndMonitor, this.cancel)
-    },
-    confirmEndMonitor() {
-      if (this.systemRunningStatus == 0) {
-        this.$message.error('停止监控失败，当前监控已停止，无法重复停止！');
-        return
-      }
-      Http.get(Apis.MANAGE.STOP_MONITOR).then(res => {
-        this.systemRunningStatus = 0
-      }).catch(error => {
-
-      })
-    },
-    updateMonitorConfig() {
-      console.log(this.monitorConfigItem)
-    },
-    deleteMonitorConfig(config) {
-      console.log(config)
-    },
-    queryUserAccessByTimeRange(startTime, endTime) {
-      return []
-    },
-    cancel() {
-      console.log('cancel')
-    },
-    showSuccessMessage(message){
-      this.$message({
-        message: message,
-        type: 'success'
-      });
-    },
-    showInfoMessage(message){
-      this.$message(message);
-    },
-    showErrorMessage(message){
-      this.$message.error(message);
-    },
-    showWarningMessage(message){
-      this.$message({
-        message: message,
-        type: 'warning'
       });
     },
   }

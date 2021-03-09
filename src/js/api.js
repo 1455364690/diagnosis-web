@@ -11,9 +11,17 @@ export default {
     GET_PC_INFO_BY_SESSION_ID_AND_METHOD_ID: 'api/get_pc_info_by_session_id_and_method_id/{session_id}/{method_id}'
   },
   MANAGE: {
+    GET_MONITOR_CURRENT_STATUS: 'api/manage/monitor/status/get',
     START_MONITOR: 'api/manage/monitor/start',
     STOP_MONITOR: 'api/manage/monitor/stop',
+
+    QUERY_MONITOR_CONFIG_LIST: 'api/manage/get_monitor_config_list',
     DELETE_MONITOR_CONFIG_BY_ID: 'api/manage/delete_monitor_by_id/<monitor_id>',
-    UPDATE_MONITOR: 'api/manage/update_monitor/<monitor_id>',
+    UPDATE_MONITOR: 'api/manage/update_monitor',
+
+    QUERY_ACCESS_SEQUENCE_LIST_BY_CONDITION: 'api/manage/query_access_sequence_list_by_condition',
+    GET_NORMAL_ACCESS_SEQUENCE_LIST: 'api/manage/get_normal_access_sequence_list',
+    DELETE_SINGLE_NORMAL_ACCESS_SEQUENCE: 'api/manage/delete_single_normal_access_sequence',
+    ADD_NORMAL_ACCESS_SEQUENCE: 'api/manage/add_normal_access_sequence',
   }
 }
