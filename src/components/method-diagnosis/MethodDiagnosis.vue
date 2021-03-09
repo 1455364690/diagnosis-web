@@ -39,6 +39,52 @@
               <el-row>
                 <el-col :span="2">&nbsp;</el-col>
                 <el-col :span="20">
+                  <el-row>
+                    <el-table
+                      v-if="systemMethodDiagnoseResult!=null && systemMethodDiagnoseResult.length !==0"
+                      show-header="false"
+                      ref="multipleTable"
+                      :data="systemMethodDiagnoseResult"
+                      tooltip-effect="dark"
+                      style="width: 100%">
+                      <el-table-column
+                        type="expand"
+                        width="55" style="height: 30px;padding-top: 0;">
+                        <template slot-scope="props">
+                          <el-row :gutter="10" style="height: 30px">
+                            <el-col :span="3">类别：</el-col>
+                            <el-col :span="20">
+                              {{ props.row.clusterLabel }}
+                            </el-col>
+                          </el-row>
+                          <el-row :gutter="10" style="height: 30px" >
+                            <el-col :span="3" style="padding-top: 70px">系统方法：</el-col>
+                            <el-col :span="20">
+                              <el-row>
+                                <table class="table">
+                                  <tbody v-for="(item,index) in props.row.result" :key="index">
+                                  <tr>
+                                    <td>{{ item }}</td>
+                                  </tr>
+                                  </tbody>
+                                </table>
+                              </el-row>
+                            </el-col>
+                          </el-row>
+                        </template>
+                      </el-table-column>
+                      <el-table-column style="height: 60px">
+                        <template slot-scope="props">
+                          <el-row :gutter="10" style="margin-bottom: 5px">
+                            <el-col :span="24" style="color: #000000">
+                              {{ props.row.clusterLabel }}
+                            </el-col>
+                          </el-row>
+                        </template>
+
+                      </el-table-column>
+                    </el-table>
+                  </el-row>
                   <el-collapse v-model="activeNames"
                                v-for="(item,index) in systemMethodDiagnoseResult" :key="index">
                     <el-collapse-item :name="index">
