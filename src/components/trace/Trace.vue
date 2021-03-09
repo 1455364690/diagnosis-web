@@ -78,6 +78,7 @@
                   ref="multipleTable"
                   :data="methodInfoList"
                   tooltip-effect="dark"
+                  show-header="false"
                   style="width: 100%">
                   <el-table-column
                     type="expand"

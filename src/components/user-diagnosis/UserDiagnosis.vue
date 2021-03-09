@@ -30,18 +30,63 @@
                 <el-col :span="2">&nbsp;</el-col>
                 <el-col :span="20">
                   <el-row>
-                    <el-collapse v-model="activeNames"
-                                 v-for="(item,index) in diagnoseResultList" :key="index">
-                      <el-collapse-item :name="index">
-                        <template slot="title">
-                          {{ item.sessionId }} - {{ item.sessionId }}
-                        </template>
-                        <div v-for="(seq,seqIndex) in item.sequence" :key="seqIndex">
-                          <div>{{ seq }}</div>
-                        </div>
+                    <el-table
+                      v-if="diagnoseResultList!=null && diagnoseResultList.length !==0"
+                      show-header="false"
+                      ref="multipleTable"
+                      :data="diagnoseResultList"
+                      tooltip-effect="dark"
+                      style="width: 100%">
+                      <el-table-column
+                        type="expand"
+                        width="55" style="height: 30px;padding-top: 0;">
+                        <template slot-scope="props">
+                          <el-row :gutter="10" style="height: 30px">
+                            <el-col :span="1">&nbsp;</el-col>
+                            <el-col :span="2">用户Id：</el-col>
+                            <el-col :span="3">
+                              {{ props.row.userId }}
+                            </el-col>
+                          </el-row>
+                          <el-row :gutter="10" style="height: 30px">
+                            <el-col :span="1">&nbsp;</el-col>
+                            <el-col :span="2">sessionId：</el-col>
+                            <el-col :span="3">
+                              {{ props.row.sessionId }}
+                            </el-col>
+                          </el-row>
+                          <el-row>
 
-                      </el-collapse-item>
-                    </el-collapse>
+                            <el-col :span="19">
+                              <el-row>
+                                <el-timeline>
+                                  <el-timeline-item
+                                    v-for="(activity, index) in props.row.sequence"
+                                    :key="index"
+                                    hide-timestamp="true">
+                                    {{activity}}
+                                  </el-timeline-item>
+                                </el-timeline>
+                              </el-row>
+                            </el-col>
+                          </el-row>
+
+                        </template>
+                      </el-table-column>
+                      <el-table-column style="height: 60px">
+                        <template slot-scope="props">
+                          <el-row :gutter="10" style="margin-bottom: 5px">
+                            <el-col :span="24" v-if="props.row.errorNumber < 0.5"  style="color: #409EFF">
+                              {{ props.row.userId }} - {{ props.row.sessionId }}
+                            </el-col>
+                            <el-col :span="24" v-if="props.row.errorNumber >= 0.5" style="color: #F56C6C">
+                              {{ props.row.userId }} - {{ props.row.sessionId }}
+                            </el-col>
+                          </el-row>
+                        </template>
+
+                      </el-table-column>
+                    </el-table>
                   </el-row>
                   <el-row v-if="diagnoseResultList == null || diagnoseResultList.length !== 0">
                     <el-pagination
@@ -109,7 +154,7 @@ export default {
           userId: 'qwe',
           sessionId: '123345',
           sequence: ['123123', '123123123', '123123123', '123123123123'],
-          errorNumber: 0.3
+          errorNumber: 0.6
         },
         {
           userId: 'qwe',
@@ -121,13 +166,13 @@ export default {
           userId: 'qwe',
           sessionId: '123345',
           sequence: ['123123', '123123123', '123123123', '123123123123'],
-          errorNumber: 0.3
+          errorNumber: 0.4
         },
         {
           userId: 'qwe',
           sessionId: '123345',
           sequence: ['123123', '123123123', '123123123', '123123123123'],
-          errorNumber: 0.3
+          errorNumber: 0.77
         }]
     }
   },
