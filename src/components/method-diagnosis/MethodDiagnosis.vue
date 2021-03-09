@@ -10,7 +10,7 @@
             <el-col :span="3" style="font-size: 15px;padding-top: 10px">选择诊断时间范围：</el-col>
             <el-col :span="10">
               <el-date-picker
-                v-model="value2"
+                v-model="selectTime"
                 type="datetimerange"
                 :picker-options="pickerOptions"
                 range-separator="至"
@@ -85,18 +85,6 @@
                       </el-table-column>
                     </el-table>
                   </el-row>
-                  <el-collapse v-model="activeNames"
-                               v-for="(item,index) in systemMethodDiagnoseResult" :key="index">
-                    <el-collapse-item :name="index">
-                      <template slot="title">
-                        {{ item.clusterLabel }}
-                      </template>
-                      <div v-for="(seq,seqIndex) in item.result" :key="seqIndex">
-                        <div>{{ seq }}</div>
-                      </div>
-
-                    </el-collapse-item>
-                  </el-collapse>
                 </el-col>
                 <el-col :span="2">&nbsp;</el-col>
               </el-row>
@@ -112,6 +100,8 @@
 </template>
 
 <script>
+import Http from '@/js/http.js'
+import Apis from '@/js/api.js'
 export default {
   name: "MethodDiagnosis",
   data() {
@@ -143,7 +133,7 @@ export default {
           }
         }]
       },
-      value2: '',
+      selectTime: '',
       activeNames: ['1'],
       systemMethodDiagnoseResult: [
         {clusterLabel:'label',result:['123123','1231231','123123123'],attributeDetail:{cpu:0.8,memory:0.4}},
@@ -153,9 +143,47 @@ export default {
     }
   },
   methods: {
+    checkTime(startTime, endTime) {
+      if (startTime!=null && endTime !=null)
+        return true
+      else {
+        this.showErrorMessage("请先选择时间段")
+        return false
+      }
+    },
     startDiagnose() {
-      console.log(this.value2)
-      this.myEcharts()
+      const startTime = this.dateFormat(this.selectTime[0])
+      const endTime = this.dateFormat(this.selectTime[0])
+      if (!checkTime(this.selectTime[0], this.selectTime[1])) {
+        return
+      }
+      const data = {
+        startTime: startTime,
+        endTime: endTime
+      }
+      Http.post(Apis.ACCESS_SEQUENCE.START_DIAGNOSE, data).then(res => {
+        this.queryDiagnoseResult()
+      }).catch(error => {
+        this.showErrorMessage('诊断失败，请重新尝试')
+      })
+      //console.log(this.value2)
+      //this.myEcharts()
+    },
+    queryDiagnoseResult() {
+      const startTime = this.dateFormat(this.selectTime[0])
+      const endTime = this.dateFormat(this.selectTime[0])
+      if (!checkTime(this.selectTime[0], this.selectTime[1])) {
+        return
+      }
+      const data = {
+        startTime: '',
+        endTime: ''
+      }
+      Http.post(Apis.SYSTEM_METHOD.QUERY_DIAGNOSE_RESULT_BY_CONDITION,data).then(res=>{
+
+      }).catch(error=>{
+        this.showErrorMessage('获取诊断结果失败，请重新尝试')
+      })
     },
     myEcharts() {
       // 基于准备好的dom，初始化echarts实例
@@ -268,7 +296,36 @@ export default {
       // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
       myChart2.setOption(option2)
-    }
+    },
+    showSuccessMessage(message) {
+      this.$message({
+        message: message,
+        type: 'success'
+      });
+    },
+    showInfoMessage(message) {
+      this.$message(message);
+    },
+    showErrorMessage(message) {
+      this.$message.error(message);
+    },
+    showWarningMessage(message) {
+      this.$message({
+        message: message,
+        type: 'warning'
+      });
+    },
+    numberFormat(s) {
+      return s < 10 ? '0' + s : s
+    },
+    dateFormat(date) {
+      if (date === undefined || date == null) {
+        return null
+      }
+      date = new Date(date)
+      var resDate = date.getFullYear() + '-' + this.numberFormat(date.getMonth() + 1) + '-' + this.numberFormat(date.getDate()) + 'T' + this.numberFormat(date.getHours()) + ':' + this.numberFormat(date.getMinutes()) + ':' + this.numberFormat(date.getSeconds()) + '.000Z';
+      return resDate
+    },
   }
 }
 </script>

@@ -10,7 +10,7 @@
             <el-col :span="3" style="font-size: 15px;padding-top: 10px">选择诊断时间范围：</el-col>
             <el-col :span="10">
               <el-date-picker
-                v-model="value2"
+                v-model="selectTime"
                 type="datetimerange"
                 :picker-options="pickerOptions"
                 range-separator="至"
@@ -113,6 +113,9 @@
 </template>
 
 <script>
+import Http from '@/js/http.js'
+import Apis from '@/js/api.js'
+
 export default {
   name: "UserDiagnosis",
   data() {
@@ -145,7 +148,7 @@ export default {
           }
         }]
       },
-      value2: '',
+      selectTime: '',
       currentPageSize: 10,
       currentPageNum: 1,
       methodInfoTotalNum: 100,
@@ -173,16 +176,86 @@ export default {
           sessionId: '123345',
           sequence: ['123123', '123123123', '123123123', '123123123123'],
           errorNumber: 0.77
-        }]
+        }],
+
     }
   },
   methods: {
+    checkTime(startTime, endTime) {
+      if (startTime!=null && endTime !=null)
+        return true
+      else {
+        this.showErrorMessage("请先选择时间段")
+        return false
+      }
+    },
     startDiagnose() {
-      console.log(this.value2)
+      const startTime = this.dateFormat(this.selectTime[0])
+      const endTime = this.dateFormat(this.selectTime[0])
+      if (!checkTime(this.selectTime[0], this.selectTime[1])) {
+        return
+      }
+      const data = {
+        startTime: startTime,
+        endTime: endTime
+      }
+      Http.post(Apis.ACCESS_SEQUENCE.START_DIAGNOSE, data).then(res => {
+        this.queryDiagnoseResult()
+      }).catch(error => {
+        this.showErrorMessage('诊断失败，请重新尝试')
+      })
     },
     currentPageChange(event) {
       console.log(this.currentPageNum)
-    }
+    },
+    queryDiagnoseResult() {
+      const startTime = this.dateFormat(this.selectTime[0])
+      const endTime = this.dateFormat(this.selectTime[0])
+      if (!checkTime(this.selectTime[0], this.selectTime[1])) {
+        return
+      }
+      const data = {
+        startTime: '',
+        endTime: '',
+        pageNum: 1,
+        pageSize: 1,
+        total: 1
+      }
+      Http.post(Apis.ACCESS_SEQUENCE.QUERY_DIAGNOSE_RESULT_BY_CONDITION,data).then(res=>{
+
+      }).catch(error=>{
+        this.showErrorMessage('获取诊断结果失败，请重新尝试')
+      })
+    },
+    numberFormat(s) {
+      return s < 10 ? '0' + s : s
+    },
+    dateFormat(date) {
+      if (date === undefined || date == null) {
+        return null
+      }
+      date = new Date(date)
+      var resDate = date.getFullYear() + '-' + this.numberFormat(date.getMonth() + 1) + '-' + this.numberFormat(date.getDate()) + 'T' + this.numberFormat(date.getHours()) + ':' + this.numberFormat(date.getMinutes()) + ':' + this.numberFormat(date.getSeconds()) + '.000Z';
+      return resDate
+    },
+    showSuccessMessage(message) {
+      this.$message({
+        message: message,
+        type: 'success'
+      });
+    },
+    showInfoMessage(message) {
+      this.$message(message);
+    },
+    showErrorMessage(message) {
+      this.$message.error(message);
+    },
+    showWarningMessage(message) {
+      this.$message({
+        message: message,
+        type: 'warning'
+      });
+    },
   }
 }
 </script>

@@ -1,4 +1,13 @@
 export default {
+  ACCESS_SEQUENCE: {
+    QUERY_DIAGNOSE_RESULT_BY_CONDITION: 'api/access_sequence/query_diagnose_result_by_condition',
+    START_DIAGNOSE: 'api/access_sequence/start_diagnose'
+  },
+  SYSTEM_METHOD: {
+    QUERY_DIAGNOSE_RESULT_BY_CONDITION: 'api/system_method/query_diagnose_result_by_condition',
+    START_DIAGNOSE: 'api/system_method/start_diagnose'
+  },
+
   USER: {
     GET_ALL_USER_ID: '/api/get_all_user_id_list/',
     GET_SESSION_LIST_ID_BY_USER_ID: 'api/get_session_list_id_by_user_id/{user_id}',
