@@ -154,7 +154,7 @@ export default {
     startDiagnose() {
       const startTime = this.dateFormat(this.selectTime[0])
       const endTime = this.dateFormat(this.selectTime[0])
-      if (!checkTime(this.selectTime[0], this.selectTime[1])) {
+      if (!this.checkTime(this.selectTime[0], this.selectTime[1])) {
         return
       }
       const data = {

@@ -8,7 +8,7 @@
         @select="handleSelect"
         background-color="#252a2f"
         text-color="#fff"
-        active-text-color="#ffd04b">
+        active-text-color="#409EFF">
         <el-menu-item index="0" disabled>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</el-menu-item>
         <el-menu-item index="1">
           <router-link :to="{ name: 'Manager'}">

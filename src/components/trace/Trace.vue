@@ -4,13 +4,13 @@
       <el-col :span="2">
         <div class="grid-content"></div>
       </el-col>
-      <el-col :span="10">
+      <el-col :span="10" >
         <div class="grid-content">
           <el-row :gutter="10">
             <el-col :span="4">
               <div class="grid-content bg-purple">
                 <el-dropdown @command="selectNode">
-                <span class="el-dropdown-link">
+                <span class="el-dropdown-link" style="color: #409EFF">
                   {{ nodeName }}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                   <el-dropdown-menu slot="dropdown">
@@ -25,7 +25,7 @@
             <el-col :span="4">
               <div class="grid-content bg-purple">
                 <el-dropdown @command="selectUser">
-                <span class="el-dropdown-link">
+                <span class="el-dropdown-link" style="color: #409EFF">
                   {{ userIdName }}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                   <el-dropdown-menu slot="dropdown">
@@ -40,7 +40,7 @@
             <el-col :span="14">
               <div class="grid-content bg-purple">
                 <el-dropdown @command="selectSession">
-                <span class="el-dropdown-link">
+                <span class="el-dropdown-link" style="color: #409EFF">
                   {{ sessionIdName }}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                   <el-dropdown-menu slot="dropdown">

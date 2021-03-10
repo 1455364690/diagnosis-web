@@ -32,7 +32,7 @@
                   <el-row>
                     <el-table
                       v-if="diagnoseResultList!=null && diagnoseResultList.length !==0"
-                      show-header="false"
+                      :show-header="false"
                       ref="multipleTable"
                       :data="diagnoseResultList"
                       tooltip-effect="dark"
@@ -192,7 +192,7 @@ export default {
     startDiagnose() {
       const startTime = this.dateFormat(this.selectTime[0])
       const endTime = this.dateFormat(this.selectTime[0])
-      if (!checkTime(this.selectTime[0], this.selectTime[1])) {
+      if (!this.checkTime(this.selectTime[0], this.selectTime[1])) {
         return
       }
       const data = {
@@ -211,12 +211,12 @@ export default {
     queryDiagnoseResult() {
       const startTime = this.dateFormat(this.selectTime[0])
       const endTime = this.dateFormat(this.selectTime[0])
-      if (!checkTime(this.selectTime[0], this.selectTime[1])) {
+      if (!this.checkTime(this.selectTime[0], this.selectTime[1])) {
         return
       }
       const data = {
-        startTime: '',
-        endTime: '',
+        startTime: startTime,
+        endTime: endTime,
         pageNum: 1,
         pageSize: 1,
         total: 1
