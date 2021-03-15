@@ -102,6 +102,7 @@
 <script>
 import Http from '@/js/http.js'
 import Apis from '@/js/api.js'
+
 export default {
   name: "MethodDiagnosis",
   data() {
@@ -161,10 +162,18 @@ export default {
         startTime: startTime,
         endTime: endTime
       }
-      Http.post(Apis.ACCESS_SEQUENCE.START_DIAGNOSE, data).then(res => {
-        this.queryDiagnoseResult()
+      Http.post(Apis.SYSTEM_METHOD.START_DIAGNOSE, data).then(res => {
+        if (res.hasOwnProperty('data')) {
+          console.log(res.data)
+          this.showSuccessMessage('诊断成功')
+        } else {
+          console.log(error.message)
+          this.showErrorMessage(error.message)
+        }
+        // this.queryDiagnoseResult()
       }).catch(error => {
-        this.showErrorMessage('诊断失败，请重新尝试')
+        console.log(error.message)
+        this.showErrorMessage(error.message)
       })
       //console.log(this.value2)
       //this.myEcharts()
@@ -176,8 +185,8 @@ export default {
         return
       }
       const data = {
-        startTime: '',
-        endTime: ''
+        startTime: startTime,
+        endTime: endTime
       }
       Http.post(Apis.SYSTEM_METHOD.QUERY_DIAGNOSE_RESULT_BY_CONDITION,data).then(res=>{
 

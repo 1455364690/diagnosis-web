@@ -200,8 +200,13 @@ export default {
         endTime: endTime
       }
       Http.post(Apis.ACCESS_SEQUENCE.START_DIAGNOSE, data).then(res => {
-        console.log(res)
-        this.queryDiagnoseResult()
+        if (res.hasOwnProperty('data')) {
+          console.log(res.data)
+          this.showSuccessMessage('诊断成功')
+        } else {
+          console.log(error.message)
+          this.showErrorMessage(error.message)
+        }
       }).catch(error => {
         this.showErrorMessage('诊断失败，请重新尝试')
       })
