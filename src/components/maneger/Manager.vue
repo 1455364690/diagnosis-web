@@ -99,11 +99,11 @@
                       stripe
                       style="width: 100%">
                       <el-table-column
-                        prop="beatName"
+                        prop="beat_name"
                         label="监控名称">
                       </el-table-column>
                       <el-table-column
-                        prop="beatIndex"
+                        prop="beat_index"
                         label="监控标识">
                       </el-table-column>
                       <el-table-column
@@ -112,15 +112,15 @@
                         width="180">
                       </el-table-column>
                       <el-table-column
-                        prop="fromTime"
+                        prop="from_time"
                         label="起始时间">
                       </el-table-column>
                       <el-table-column
-                        prop="toTime"
+                        prop="to_time"
                         label="终止时间">
                       </el-table-column>
                       <el-table-column
-                        prop="lastTimeSuccess"
+                        prop="last_time_success"
                         label="状态">
                       </el-table-column>
                       <el-table-column
@@ -217,10 +217,10 @@
     <el-dialog title="监控配置信息" :visible.sync="updateMonitorConfigVisible">
       <el-form label-position="right" label-width="80px" :model="monitorConfigItem">
         <el-form-item label="监控名称">
-          <el-input v-model="monitorConfigItem.beatName"></el-input>
+          <el-input v-model="monitorConfigItem.beat_name"></el-input>
         </el-form-item>
         <el-form-item label="监控标识">
-          <el-input v-model="monitorConfigItem.beatIndex"></el-input>
+          <el-input v-model="monitorConfigItem.beat_index"></el-input>
         </el-form-item>
         <el-form-item label="监控地址">
           <el-input v-model="monitorConfigItem.url"></el-input>
@@ -348,23 +348,24 @@ export default {
       }, {userId: '123123', sessionId: '1233333', sequence: ['123', '123123', '123123', '123123']}],
       monitorConfigList: [{
         id: 1,
-        beatName: 'filbeat',
-        beatIndex: 'aaa',
-        fromTime: 'aaa',
-        toTime: 'aaa',
-        lastTimeSuccess: 'aaa',
-        isStarted: 'aaa',
+        beat_name: 'filbeat',
+        beat_index: 'aaa',
+        from_time: 'aaa',
+        to_time: 'aaa',
+        last_time_success: 'aaa',
+        is_started: 'aaa',
         url: 'http://123.com',
-      }, {
-        id: 2,
-        beatName: 'skywalking',
-        beatIndex: 'aaa',
-        fromTime: 'aaa',
-        toTime: 'a',
-        lastTimeSuccess: 'aa',
-        isStarted: 'aa',
-        url: 'http://123.com'
-      }],
+      },
+        {
+          id: 2,
+          beat_name: 'filbeat',
+          beat_index: 'aaa',
+          from_time: 'aaa',
+          to_time: 'aaa',
+          last_time_success: 'aaa',
+          is_started: 'aaa',
+          url: 'http://123.com',
+        },],
       monitorConfigItem: {},
       pickerOptions: {
         shortcuts: [{
