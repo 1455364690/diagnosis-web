@@ -45,14 +45,14 @@
                             <el-col :span="1">&nbsp;</el-col>
                             <el-col :span="2">用户Id：</el-col>
                             <el-col :span="3">
-                              {{ props.row.userId }}
+                              {{ props.row.user_id }}
                             </el-col>
                           </el-row>
                           <el-row :gutter="10" style="height: 30px">
                             <el-col :span="1">&nbsp;</el-col>
                             <el-col :span="2">sessionId：</el-col>
-                            <el-col :span="3">
-                              {{ props.row.sessionId }}
+                            <el-col :span="10">
+                              {{ props.row.session_id }}
                             </el-col>
                           </el-row>
                           <el-row>
@@ -61,10 +61,11 @@
                               <el-row>
                                 <el-timeline>
                                   <el-timeline-item
+                                    :color="timeLineColorMap[activity.level]"
                                     v-for="(activity, index) in props.row.sequence"
                                     :key="index"
                                     hide-timestamp="true">
-                                    {{activity}}
+                                    {{activity.api}}
                                   </el-timeline-item>
                                 </el-timeline>
                               </el-row>
@@ -76,11 +77,11 @@
                       <el-table-column style="height: 60px">
                         <template slot-scope="props">
                           <el-row :gutter="10" style="margin-bottom: 5px">
-                            <el-col :span="24" v-if="props.row.errorNumber < 0.5"  style="color: #409EFF">
-                              {{ props.row.userId }} - {{ props.row.sessionId }}
+                            <el-col :span="24" v-if="props.row.error_number < 0.5" style="color: #409EFF">
+                              {{ props.row.user_id }} - {{ props.row.session_id }}
                             </el-col>
-                            <el-col :span="24" v-if="props.row.errorNumber >= 0.5" style="color: #F56C6C">
-                              {{ props.row.userId }} - {{ props.row.sessionId }}
+                            <el-col :span="24" v-if="props.row.error_number >= 0.5" style="color: #F56C6C">
+                              {{ props.row.user_id }} - {{ props.row.session_id }}
                             </el-col>
                           </el-row>
                         </template>
@@ -152,31 +153,37 @@ export default {
       currentPageSize: 10,
       currentPageNum: 1,
       methodInfoTotalNum: 100,
+      timeLineColorMap: {
+        0: '#409EFF',
+        1: '#E6A23C',
+        2: '#F56C6C'
+      },
       diagnoseResultList: [
-        {
-          userId: 'qwe',
-          sessionId: '123345',
-          sequence: ['123123', '123123123', '123123123', '123123123123'],
-          errorNumber: 0.6
-        },
-        {
-          userId: 'qwe',
-          sessionId: '123345',
-          sequence: ['123123', '123123123', '123123123', '123123123123'],
-          errorNumber: 0.3
-        },
-        {
-          userId: 'qwe',
-          sessionId: '123345',
-          sequence: ['123123', '123123123', '123123123', '123123123123'],
-          errorNumber: 0.4
-        },
-        {
-          userId: 'qwe',
-          sessionId: '123345',
-          sequence: ['123123', '123123123', '123123123', '123123123123'],
-          errorNumber: 0.77
-        }],
+        // {
+        //   userId: 'qwe',
+        //   sessionId: '123345',
+        //   sequence: ['123123', '123123123', '123123123', '123123123123'],
+        //   errorNumber: 0.6
+        // },
+        // {
+        //   userId: 'qwe',
+        //   sessionId: '123345',
+        //   sequence: ['123123', '123123123', '123123123', '123123123123'],
+        //   errorNumber: 0.3
+        // },
+        // {
+        //   userId: 'qwe',
+        //   sessionId: '123345',
+        //   sequence: ['123123', '123123123', '123123123', '123123123123'],
+        //   errorNumber: 0.4
+        // },
+        // {
+        //   userId: 'qwe',
+        //   sessionId: '123345',
+        //   sequence: ['123123', '123123123', '123123123', '123123123123'],
+        //   errorNumber: 0.77
+        // }
+      ],
 
     }
   },
@@ -200,12 +207,14 @@ export default {
         endTime: endTime
       }
       Http.post(Apis.ACCESS_SEQUENCE.START_DIAGNOSE, data).then(res => {
-        if (res.hasOwnProperty('data')) {
+        if (res.success === true) {
+          //this.queryDiagnoseResult()
           console.log(res.data)
+          this.diagnoseResultList = res.data
           this.showSuccessMessage('诊断成功')
         } else {
-          console.log(error.message)
-          this.showErrorMessage(error.message)
+          console.log(res.message)
+          this.showErrorMessage(res.message)
         }
       }).catch(error => {
         this.showErrorMessage('诊断失败，请重新尝试')
