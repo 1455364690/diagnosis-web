@@ -32,5 +32,6 @@ export default {
     GET_NORMAL_ACCESS_SEQUENCE_LIST: 'api/manage/get_normal_access_sequence_list',
     DELETE_SINGLE_NORMAL_ACCESS_SEQUENCE: 'api/manage/delete_single_normal_access_sequence',
     ADD_NORMAL_ACCESS_SEQUENCE: 'api/manage/add_normal_access_sequence',
+    GET_NORMAL_ACCESS_SEQUENCE_DETAIL_BY_SESSION_ID: 'api/manage/get_normal_access_sequence_detail_by_session_id/{session_id}'
   }
 }

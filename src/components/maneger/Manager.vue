@@ -23,9 +23,9 @@
                   </el-col>
                   <el-col :span="10">
                     <div class="grid-content bg-purple">
-                      <el-button type="primary" @click="startMonitor" v-if="systemRunningStatus==0" plain>启动监控
+                      <el-button type="primary" size="small" @click="startMonitor" v-if="systemRunningStatus==0" >启动监控
                       </el-button>
-                      <el-button type="warning" @click="endMonitor" v-if="systemRunningStatus==1" plain>停止监控</el-button>
+                      <el-button type="warning" size="small" @click="endMonitor" v-if="systemRunningStatus==1" >停止监控</el-button>
                     </div>
                   </el-col>
                 </el-row>
@@ -163,29 +163,34 @@
                           ref="multipleTable"
                           :data="normalUserAccessSequenceList"
                           tooltip-effect="dark"
+                          :tree-props="{children: 'detail', hasChildren: 'hasChildren'}"
                           style="width: 100%"
+                          @expand-change="getNormalAccessSequenceBySessionId"
                           @selection-change="handleSelectionChange">
                           <el-table-column
                             type="expand"
+
                             width="55">
                             <template slot-scope="props">
-                              <el-form label-position="left" v-for="(item,index) in props.row.sequence" :key="index"
-                                       inline class="demo-table-expand">
-                                <el-form-item style="height: 10px" label="访问序列：">
-                                  <span>{{ item }}</span>
-                                </el-form-item>
-                              </el-form>
+                              <el-timeline>
+                                <el-timeline-item
+                                  v-for="(item, index) in props.row.sequence"
+                                  :key="index">
+                                  {{ item.url }}
+                                </el-timeline-item>
+                              </el-timeline>
                             </template>
                           </el-table-column>
                           <el-table-column
                             label="用户id"
+                            width="200"
                           >
-                            <template slot-scope="scope">{{ scope.row.userId }}</template>
+                            <template slot-scope="scope">{{ scope.row.user_id }}</template>
                           </el-table-column>
                           <el-table-column
                             label="sessionId"
                           >
-                            <template slot-scope="scope">{{ scope.row.sessionId }}</template>
+                            <template slot-scope="scope">{{ scope.row.session_id }}</template>
                           </el-table-column>
                           <el-table-column label="操作">
                             <template slot-scope="props">
@@ -282,22 +287,25 @@
             type="expand"
             width="55">
             <template slot-scope="props">
-              <el-form label-position="left" v-for="(item,index) in props.row.sequence" :key="index" inline class="demo-table-expand">
-                <el-form-item style="height: 10px" label="访问序列：">
-                  <span>{{item}}</span>
-                </el-form-item>
-              </el-form>
+              <el-timeline>
+                <el-timeline-item
+                  v-for="(item, index) in props.row.sequence"
+                  :key="index">
+                  {{ item.url }}
+                </el-timeline-item>
+              </el-timeline>
             </template>
           </el-table-column>
           <el-table-column
             label="用户id"
+            width="100"
           >
-            <template slot-scope="scope">{{ scope.row.userId }}</template>
+            <template slot-scope="scope">{{ scope.row.user_id }}</template>
           </el-table-column>
           <el-table-column
             label="sessionId"
           >
-            <template slot-scope="scope">{{ scope.row.sessionId }}</template>
+            <template slot-scope="scope">{{ scope.row.session_id }}</template>
           </el-table-column>
         </el-table>
       </el-row>
@@ -329,7 +337,7 @@ export default {
     return {
       selectTime: '',
       currentPageNum: 1,
-      currentPageSize: 15,
+      currentPageSize: 10,
       pageTotalNum: 0,
       updateMonitorConfigVisible: false,
       addNormalAccessSequenceVisible: false,
@@ -395,7 +403,9 @@ export default {
         }]
       },
       queryAccessSequenceList: [],
-      multipleSelection: []
+      multipleSelection: [],
+      sessionIdToDetail: new Map(),
+      expandedRowsNum: 0
     };
   },
   mounted() {
@@ -409,7 +419,7 @@ export default {
   methods: {
     queryMonitorCurrentStatus() {
       Http.get(Apis.MANAGE.GET_MONITOR_CURRENT_STATUS).then(res => {
-        this.systemRunningStatus = res.status
+        this.systemRunningStatus = res.data
       }).catch(error => {
         this.showErrorMessage('获取当前监控状态失败:' + error)
       })
@@ -428,16 +438,29 @@ export default {
         this.showErrorMessage('获取用户正常访问序列失败')
       })
     },
+    getNormalAccessSequenceBySessionId(row, expandedRows) {
+      if (expandedRows.length > this.expandedRowsNum) {
+        Http.get(Apis.MANAGE.GET_NORMAL_ACCESS_SEQUENCE_DETAIL_BY_SESSION_ID
+          .replace('{session_id}', row.session_id)).then(res => {
+          this.sessionIdToDetail.set(row.session_id, res.data)
+        }).catch(error => {
+
+        })
+
+        console.log(this.sessionIdToDetail)
+      }
+      this.expandedRowsNum = expandedRows.length
+    },
     startMonitor() {
       this.checkMessageBox('确认启动监控？', this.confirmStartMonitor, this.cancel)
     },
     confirmStartMonitor() {
-      if (this.systemRunningStatus == 1) {
+      if (this.systemRunningStatus === 1) {
         this.showErrorMessage('启动监控失败，当前监控已启动，无法重复启动！');
         return
       }
       Http.get(Apis.MANAGE.START_MONITOR).then(res => {
-        this.systemRunningStatus = res.status
+        this.queryMonitorCurrentStatus()
       }).catch(error => {
 
       })
@@ -446,12 +469,12 @@ export default {
       this.checkMessageBox('确认停止监控？', this.confirmEndMonitor, this.cancel)
     },
     confirmEndMonitor() {
-      if (this.systemRunningStatus == 0) {
+      if (this.systemRunningStatus === 0) {
         this.showErrorMessage('停止监控失败，当前监控已停止，无法重复停止！');
         return
       }
       Http.get(Apis.MANAGE.STOP_MONITOR).then(res => {
-        this.systemRunningStatus = res.status
+        this.queryMonitorCurrentStatus()
       }).catch(error => {
 
       })
@@ -482,11 +505,13 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        console.log(config)
         const accessSequenceConfig = {
-          userId: config.userId,
-          sessionId: config.sessionId
+          id: config.id,
+          user_id: config.user_id,
+          session_id: config.session_id
         };
-        Http.post(Apis.post(Apis.MANAGE.DELETE_SINGLE_NORMAL_ACCESS_SEQUENCE, accessSequenceConfig)).then(res => {
+        Http.post(Apis.MANAGE.DELETE_SINGLE_NORMAL_ACCESS_SEQUENCE, accessSequenceConfig).then(res => {
           this.showSuccessMessage('删除成功')
           this.queryNormalAccessSequenceList()
         }).catch(error => {
@@ -499,7 +524,7 @@ export default {
     addNormalAccessSequence() {
       console.log(this.multipleSelection)
       Http.post(Apis.MANAGE.ADD_NORMAL_ACCESS_SEQUENCE, this.multipleSelection).then(res => {
-        this.showSuccessMessage('添加用户访问序列失败')
+        this.showSuccessMessage('添加用户访问序列成功')
         this.queryNormalAccessSequenceList()
       }).catch(error => {
         this.showErrorMessage('添加用户访问序列失败')
@@ -511,8 +536,8 @@ export default {
         sessionId: this.queryAccessSequenceFilter.sessionId === '' ? null : this.queryAccessSequenceFilter.sessionId,
         startTime: this.dateFormat(this.selectTime[0]),
         endTime: this.dateFormat(this.selectTime[1]),
-        pageNum: this.pageNum,
-        pageSize: this.pageSize,
+        pageNum: this.currentPageNum,
+        pageSize: this.currentPageSize,
         total: this.pageTotalNum
       }
       console.log(queryCondition)
@@ -584,16 +609,8 @@ export default {
         type: 'warning'
       }).then(() => {
         confirm()
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        });
       }).catch(() => {
         cancel()
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });
       });
     },
   }
