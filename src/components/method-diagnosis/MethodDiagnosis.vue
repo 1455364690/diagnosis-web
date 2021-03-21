@@ -27,7 +27,7 @@
             <div class="panel-heading" style="background: rgba(153, 153, 153, 0.8)" >系统方法诊断结果</div>
             <div class="panel-body">
               <el-row style="height: 400px">
-                <el-col span="1">&nbsp;</el-col>
+                <el-col :span="1">&nbsp;</el-col>
                 <el-col :span="11" style="height: 100%">
                   <div id="rate" style="width: 100%;height:100%"></div>
                 </el-col>
@@ -42,7 +42,7 @@
                   <el-row>
                     <el-table
                       v-if="systemMethodDiagnoseResult!=null && systemMethodDiagnoseResult.length !==0"
-                      show-header="false"
+                      :show-header="false"
                       ref="multipleTable"
                       :data="systemMethodDiagnoseResult"
                       tooltip-effect="dark"
@@ -163,8 +163,9 @@ export default {
         endTime: endTime
       }
       Http.post(Apis.SYSTEM_METHOD.START_DIAGNOSE, data).then(res => {
-        if (res.hasOwnProperty('data')) {
+        if (res.success === true) {
           console.log(res.data)
+          this.systemMethodDiagnoseResult = res.data
           this.showSuccessMessage('诊断成功')
         } else {
           console.log(error.message)
