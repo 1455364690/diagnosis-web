@@ -26,12 +26,13 @@
           <div class="panel panel-default">
             <div class="panel-heading" style="background: rgba(153, 153, 153, 0.8)" >系统方法诊断结果</div>
             <div class="panel-body">
-              <el-row style="height: 400px" v-if="systemMethodDiagnoseResult">
+              <el-row style="height: 500px">
                 <el-col :span="1">&nbsp;</el-col>
                 <el-col :span="11" style="height: 100%">
                   <div id="rate" style="width: 100%;height:100%"></div>
                 </el-col>
-                <el-col :span="1" style="height:100%;width: 1px;border: 1px solid gray"></el-col>
+                <el-col :span="1" style="height:100%;width: 1px;border: 1px solid gray"
+                        v-if="systemMethodDiagnoseResult"></el-col>
                 <el-col :span="11" style="height:100%">
                   <div id="error" style="width: 100%;height:100%"></div>
                 </el-col>
@@ -166,12 +167,16 @@ export default {
       },
       selectTime: '',
       activeNames: ['1'],
-      systemMethodDiagnoseResult: null
+      systemMethodDiagnoseResult: null,
+      picture_rate: [],
+      picture_wrong_number: []
     }
+  },
+  mounted() {
   },
   methods: {
     checkTime(startTime, endTime) {
-      if (startTime!=null && endTime !=null)
+      if (startTime != null && endTime != null)
         return true
       else {
         this.showErrorMessage("请先选择时间段")
@@ -192,7 +197,10 @@ export default {
         if (res.success === true) {
           console.log(res.data)
           this.systemMethodDiagnoseResult = res.data.diagnose_result_list
+          this.picture_rate = res.data.diagnose_result_graph.picture_rate
+          this.picture_wrong_number = res.data.diagnose_result_graph.picture_wrong_number
           this.showSuccessMessage('诊断成功')
+          this.myEcharts()
         } else {
           console.log(error.message)
           this.showErrorMessage(error.message)
@@ -235,9 +243,16 @@ export default {
           },
           enabled: true
         },
-
+        title: {
+          left: 'center',
+          text: '各类别异常系数',
+        },
+        legend: {
+          top: 'bottom',
+          left: 'center'
+        },
         toolbox: {
-          show: false,
+          show: true,
           feature: {
             mark: {show: true},
             dataView: {show: true, readOnly: false},
@@ -246,14 +261,14 @@ export default {
           }
         },
         tooltip: {
-          formatter: '{a} <br/>{b} : {c} ({d}%)',
+          formatter: '{a} <br/>类别：{b} ；异常系数：{c} ',
           trigger: 'item'
         },
         series: [
           {
             name: '系统方法',
             type: 'pie',
-            radius: [30, 200],
+            radius: [30, 150],
             center: ['50%', '50%'],
             roseType: 'area',
             itemStyle: {
@@ -274,21 +289,19 @@ export default {
               show: false
             },
 
-            data: [
-              {value: 0.5, name: 'login()'},
-              {value: 0.6, name: 'query()'},
-              {value: 0.7, name: 'in()'},
-              {value: 0.8, name: 'get()'},
-              {value: 0.9, name: 'set()'},
-              {value: 1, name: 'offer()'},
-            ],
+            data: this.picture_wrong_number
           }
         ]
       };
 
       var option = {
         tooltip: {
+          formatter: '{a} <br/>{b} : {c}个 (占比{d}%)',
           trigger: 'item'
+        },
+        title: {
+          left: 'center',
+          text: '系统方法分类图',
         },
         legend: {
           top: 'bottom',
@@ -296,7 +309,7 @@ export default {
         },
         series: [
           {
-            name: '访问来源',
+            name: '系统方法分类数量',
             type: 'pie',
             radius: ['40%', '70%'],
             avoidLabelOverlap: false,
@@ -319,13 +332,7 @@ export default {
             labelLine: {
               show: false
             },
-            data: [
-              {value: 1048, name: '搜索引擎'},
-              {value: 735, name: '直接访问'},
-              {value: 580, name: '邮件营销'},
-              {value: 484, name: '联盟广告'},
-              {value: 300, name: '视频广告'}
-            ]
+            data: this.picture_rate
           }
         ]
       };
