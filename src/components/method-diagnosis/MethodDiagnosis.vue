@@ -26,7 +26,7 @@
           <div class="panel panel-default">
             <div class="panel-heading" style="background: rgba(153, 153, 153, 0.8)" >系统方法诊断结果</div>
             <div class="panel-body">
-              <el-row style="height: 400px">
+              <el-row style="height: 400px" v-if="systemMethodDiagnoseResult">
                 <el-col :span="1">&nbsp;</el-col>
                 <el-col :span="11" style="height: 100%">
                   <div id="rate" style="width: 100%;height:100%"></div>
@@ -54,20 +54,50 @@
                           <el-row :gutter="10" style="height: 30px">
                             <el-col :span="3">类别：</el-col>
                             <el-col :span="20">
-                              {{ props.row.clusterLabel }}
+                              {{ props.row.cluster_label }}
                             </el-col>
                           </el-row>
                           <el-row :gutter="10" style="height: 30px" >
                             <el-col :span="3" style="padding-top: 70px">系统方法：</el-col>
                             <el-col :span="20">
                               <el-row>
-                                <table class="table">
-                                  <tbody v-for="(item,index) in props.row.result" :key="index">
-                                  <tr>
-                                    <td>{{ item }}</td>
-                                  </tr>
-                                  </tbody>
-                                </table>
+                                <el-table
+                                  :data="props.row.method_list"
+                                  style="width: 100%"
+                                  height="250">
+                                  <el-table-column
+                                    fixed
+                                    prop="class_method"
+                                    label="方法名称"
+                                    width="400">
+                                  </el-table-column>
+                                  <el-table-column
+                                    prop="consume_time"
+                                    label="耗时"
+                                    width="120">
+                                  </el-table-column>
+                                  <el-table-column
+                                    label="CPU"
+                                    width="120">
+                                    <template slot-scope="props">
+                                      {{props.row.consume_time}}
+                                    </template>
+                                  </el-table-column>
+                                  <el-table-column
+                                    label="内存"
+                                    width="120">
+                                    <template slot-scope="props">
+                                      {{props.row.consume_time}}
+                                    </template>
+                                  </el-table-column>
+                                  <el-table-column
+                                    label="JVM"
+                                    width="120">
+                                    <template slot-scope="props">
+                                      {{props.row.consume_time}}
+                                    </template>
+                                  </el-table-column>
+                                </el-table>
                               </el-row>
                             </el-col>
                           </el-row>
@@ -77,7 +107,7 @@
                         <template slot-scope="props">
                           <el-row :gutter="10" style="margin-bottom: 5px">
                             <el-col :span="24" style="color: #000000">
-                              {{ props.row.clusterLabel }}
+                              {{ props.row.cluster_label }}
                             </el-col>
                           </el-row>
                         </template>
@@ -136,11 +166,7 @@ export default {
       },
       selectTime: '',
       activeNames: ['1'],
-      systemMethodDiagnoseResult: [
-        {clusterLabel:'label',result:['123123','1231231','123123123'],attributeDetail:{cpu:0.8,memory:0.4}},
-        {clusterLabel:'label',result:['123123','1231231','123123123'],attributeDetail:{cpu:0.8,memory:0.4}},
-        {clusterLabel:'label',result:['123123','1231231','123123123'],attributeDetail:{cpu:0.8,memory:0.4}}
-      ]
+      systemMethodDiagnoseResult: null
     }
   },
   methods: {
@@ -165,7 +191,7 @@ export default {
       Http.post(Apis.SYSTEM_METHOD.START_DIAGNOSE, data).then(res => {
         if (res.success === true) {
           console.log(res.data)
-          this.systemMethodDiagnoseResult = res.data
+          this.systemMethodDiagnoseResult = res.data.diagnose_result_list
           this.showSuccessMessage('诊断成功')
         } else {
           console.log(error.message)
