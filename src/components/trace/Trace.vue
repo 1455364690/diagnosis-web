@@ -175,7 +175,7 @@ export default {
   data() {
     return {
       vals: {value: 'nothing'},
-      nodeList: ['mooctest'],
+      nodeList: ['diagnose'],
       nodeName: '节点名称',
       userIdName: '用户',
       sessionIdName: 'session',

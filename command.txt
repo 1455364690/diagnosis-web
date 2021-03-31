@@ -1,1 +1,2 @@
 wget http://third-part-tool.oss-cn-shanghai.aliyuncs.com/private_cloud/crowd-test-service/diagnose_web.tar
+docker build -t diagnose-web .

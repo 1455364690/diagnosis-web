@@ -1,0 +1,16 @@
+version: "2"
+services:
+  diagnose-backend:
+    restart: always
+    container_name: diagnose-backend
+    image: diagnosis:latest
+    ports:
+      - 8000:8000
+  diagnose-frontend:
+    restart: always
+    container_name: diagnose-frontend
+    image: diagnose-web:latest
+    depends_on:
+      - diagnose-backend
+    ports:
+      - 6789:6789
