@@ -78,7 +78,7 @@
                   ref="multipleTable"
                   :data="methodInfoList"
                   tooltip-effect="dark"
-                  show-header="false"
+                  :show-header="false"
                   style="width: 100%">
                   <el-table-column
                     type="expand"
@@ -88,22 +88,22 @@
                         <el-col :span="1">&nbsp;</el-col>
                         <el-col :span="2">用户Id：</el-col>
                         <el-col :span="3">
-                          <span>{{props.row.userId}}</span>
+                          <span>{{props.row.user_id}}</span>
                         </el-col>
                       </el-row>
                       <el-row :gutter="10" style="height: 50px">
                         <el-col :span="1">&nbsp;</el-col>
                         <el-col :span="2">sessionId：</el-col>
-                        <el-col :span="3">
-                          <span>{{props.row.sessionId}}</span>
+                        <el-col :span="20">
+                          <span>{{props.row.session_id}}</span>
                         </el-col>
                       </el-row>
                       <el-row :gutter="10" style="height: 50px">
                         <el-col :span="1">&nbsp;</el-col>
                         <el-col :span="2">执行耗时：</el-col>
                         <el-col :span="3">
-                          <el-tag v-if="props.row.consumeTime != null" effect="dark" type="info" >
-                            {{ props.row.consumeTime }}&nbsp;ms
+                          <el-tag v-if="props.row.consume_time != null" effect="dark" type="info" >
+                            {{ props.row.consume_time }}&nbsp;ms
                           </el-tag>
                         </el-col>
                       </el-row>
@@ -111,30 +111,30 @@
                         <el-col :span="1">&nbsp;</el-col>
                         <el-col :span="2">执行时间：</el-col>
                         <el-col :span="10" style="color: #909399;font-size: 15px;">
-                          {{ props.row.logTime }}
+                          {{ props.row.log_time }}
                         </el-col>
                       </el-row>
                       <el-row :gutter="10" style="height: 50px">
                         <el-col :span="1">&nbsp;</el-col>
                         <el-col :span="2">接口名称：</el-col>
                         <el-col :span="10" style="color: #909399;font-size: 15px;">
-                          {{ props.row.interfaceName }}
+                          {{ props.row.url }}
                         </el-col>
                       </el-row>
                       <el-row :gutter="10" style="height: 50px">
                         <el-col :span="1">&nbsp;</el-col>
                         <el-col :span="2">http方法：</el-col>
                         <el-col :span="10" style="color: #909399;font-size: 15px;">
-                          {{ props.row.httpMethod }}
+                          {{ props.row.http_method }}
                         </el-col>
                       </el-row>
                     </template>
                   </el-table-column>
-                  <el-table-column label="用户访问序列" style="height: 60px">
+                  <el-table-column label="接口名称" style="height: 60px">
                     <template slot-scope="props">
                       <el-row :gutter="10" style="margin-bottom: 5px">
                         <el-col :span="24" style="color: #409EFF">{{
-                            props.row.interfaceName
+                            props.row.url
                           }}
                         </el-col>
                       </el-row>
@@ -236,8 +236,9 @@ export default {
             {interfaceName:'123123123123','consumeTime':'123123',userId:'123123123',httpMethod:'GET',sessionId:'123123123123',traceId:'123123123123',logTime:'123123'},
 
           ]
+        console.log(res)
           //this.methodInfoList = res.list
-          this.methodInfoList = data
+          this.methodInfoList = res.list
           this.methodInfoTotalNum = res.total
           console.log(this.methodInfoList)
       })

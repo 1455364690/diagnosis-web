@@ -152,7 +152,7 @@ export default {
       selectTime: '',
       currentPageSize: 10,
       currentPageNum: 1,
-      methodInfoTotalNum: 100,
+      methodInfoTotalNum: 10,
       timeLineColorMap: {
         0: '#409EFF',
         1: '#E6A23C',
@@ -211,6 +211,7 @@ export default {
           //this.queryDiagnoseResult()
           console.log(res.data)
           this.diagnoseResultList = res.data
+          this.methodInfoTotalNum = res.total
           this.showSuccessMessage('诊断成功')
         } else {
           console.log(res.message)
