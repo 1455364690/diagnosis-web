@@ -96,16 +96,15 @@
                   <div class="grid-content">
                     <el-table
                       :data="monitorConfigList"
+                      :fit="true"
                       stripe
                       style="width: 100%">
                       <el-table-column
                         prop="beat_name"
-                        width="100"
                         label="监控名称">
                       </el-table-column>
                       <el-table-column
                         prop="beat_index"
-                        width="250"
                         label="监控标识">
                       </el-table-column>
                       <el-table-column
@@ -114,14 +113,12 @@
                         width="180">
                       </el-table-column>
                       <el-table-column
-                        width="160"
                         label="起始时间">
                         <template slot-scope="scope">
                           {{ showTimeFormat(scope.row.from_time) }}
                         </template>
                       </el-table-column>
                       <el-table-column
-                        width="160"
                         label="终止时间">
                         <template slot-scope="scope">
                           {{ showTimeFormat(scope.row.to_time) }}
@@ -132,8 +129,7 @@
                       <!--                        label="状态">-->
                       <!--                      </el-table-column>-->
                       <el-table-column
-                        label="操作"
-                        width="150">
+                        label="操作">
                         <template slot-scope="scope">
                           <el-button size="mini" type="primary"
                                      @click="showUpdateMonitorConfigVisibleDialog(scope.row)">修改配置项

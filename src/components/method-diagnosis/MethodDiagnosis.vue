@@ -108,7 +108,7 @@
                         <template slot-scope="props">
                           <el-row :gutter="10" style="margin-bottom: 5px">
                             <el-col :span="24" style="color: #000000">
-                              {{ props.row.cluster_label }}
+                              类别名称[&nbsp;{{ props.row.cluster_label }}&nbsp;]
                             </el-col>
                           </el-row>
                         </template>
