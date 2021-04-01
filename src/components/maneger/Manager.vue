@@ -100,10 +100,12 @@
                       style="width: 100%">
                       <el-table-column
                         prop="beat_name"
+                        width="100"
                         label="监控名称">
                       </el-table-column>
                       <el-table-column
                         prop="beat_index"
+                        width="250"
                         label="监控标识">
                       </el-table-column>
                       <el-table-column
@@ -112,25 +114,31 @@
                         width="180">
                       </el-table-column>
                       <el-table-column
-                        prop="from_time"
+                        width="160"
                         label="起始时间">
+                        <template slot-scope="scope">
+                          {{ showTimeFormat(scope.row.from_time) }}
+                        </template>
                       </el-table-column>
                       <el-table-column
-                        prop="to_time"
+                        width="160"
                         label="终止时间">
+                        <template slot-scope="scope">
+                          {{ showTimeFormat(scope.row.to_time) }}
+                        </template>
                       </el-table-column>
-                      <el-table-column
-                        prop="last_time_success"
-                        label="状态">
-                      </el-table-column>
+                      <!--                      <el-table-column-->
+                      <!--                        prop="last_time_success"-->
+                      <!--                        label="状态">-->
+                      <!--                      </el-table-column>-->
                       <el-table-column
                         label="操作"
-                        width="300">
+                        width="150">
                         <template slot-scope="scope">
                           <el-button size="mini" type="primary"
                                      @click="showUpdateMonitorConfigVisibleDialog(scope.row)">修改配置项
                           </el-button>
-<!--                          <el-button size="mini" type="danger" @click="deleteMonitorConfig(scope.row)">删除</el-button>-->
+                          <!--                          <el-button size="mini" type="danger" @click="deleteMonitorConfig(scope.row)">删除</el-button>-->
                         </template>
                       </el-table-column>
                     </el-table>
@@ -182,13 +190,13 @@
                             </template>
                           </el-table-column>
                           <el-table-column
-                            label="用户id"
+                            label="源系统用户id"
                             width="200"
                           >
                             <template slot-scope="scope">{{ scope.row.user_id }}</template>
                           </el-table-column>
                           <el-table-column
-                            label="sessionId"
+                            label="源系统sessionId"
                           >
                             <template slot-scope="scope">{{ scope.row.session_id }}</template>
                           </el-table-column>
@@ -297,13 +305,13 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="用户id"
-            width="100"
+            label="源系统用户id"
+            width="200"
           >
             <template slot-scope="scope">{{ scope.row.user_id }}</template>
           </el-table-column>
           <el-table-column
-            label="sessionId"
+            label="源系统用户sessionId"
           >
             <template slot-scope="scope">{{ scope.row.session_id }}</template>
           </el-table-column>
@@ -433,7 +441,15 @@ export default {
     },
     queryNormalAccessSequenceList() {
       Http.get(Apis.MANAGE.GET_NORMAL_ACCESS_SEQUENCE_LIST).then(res => {
-        this.normalUserAccessSequenceList = res.data
+        if (res.success) {
+          if (res.data == null) {
+            this.normalUserAccessSequenceList = []
+          } else {
+            this.normalUserAccessSequenceList = res.data
+          }
+        } else {
+          this.showErrorMessage('获取用户正常访问序列失败')
+        }
       }).catch(error => {
         this.showErrorMessage('获取用户正常访问序列失败')
       })
@@ -561,7 +577,11 @@ export default {
        */
     },
 
-
+    showTimeFormat(originTime) {
+      //2021-04-01T10:06:01.394Z
+      const newTime = originTime.substr(0, 10) + " " + originTime.substr(11, 8)
+      return newTime
+    },
     numberFormat(s) {
       return s < 10 ? '0' + s : s
     },
