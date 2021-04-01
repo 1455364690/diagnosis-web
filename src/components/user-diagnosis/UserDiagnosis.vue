@@ -43,14 +43,14 @@
                         <template slot-scope="props">
                           <el-row :gutter="10" style="height: 30px">
                             <el-col :span="1">&nbsp;</el-col>
-                            <el-col :span="2">用户Id：</el-col>
+                            <el-col :span="4">源系统用户Id：</el-col>
                             <el-col :span="3">
                               {{ props.row.user_id }}
                             </el-col>
                           </el-row>
                           <el-row :gutter="10" style="height: 30px">
                             <el-col :span="1">&nbsp;</el-col>
-                            <el-col :span="2">sessionId：</el-col>
+                            <el-col :span="4">源系统sessionId：</el-col>
                             <el-col :span="10">
                               {{ props.row.session_id }}
                             </el-col>
@@ -78,10 +78,13 @@
                         <template slot-scope="props">
                           <el-row :gutter="10" style="margin-bottom: 5px">
                             <el-col :span="24" v-if="props.row.error_number < 0.5" style="color: #409EFF">
-                              {{ props.row.user_id }} - {{ props.row.session_id }}
+                              源系统用户id[{{ props.row.user_id }}] - 源系统sessionId[{{ props.row.session_id }}]
                             </el-col>
-                            <el-col :span="24" v-if="props.row.error_number >= 0.5" style="color: #F56C6C">
-                              {{ props.row.user_id }} - {{ props.row.session_id }}
+                            <el-col :span="24" v-if="props.row.error_number > 0.5 && props.row.error_number < 0.8" style="color: #e6a23c">
+                              源系统用户id[{{ props.row.user_id }}] - 源系统sessionId[{{ props.row.session_id }}]
+                            </el-col>
+                            <el-col :span="24" v-if="props.row.error_number >= 0.8" style="color: #F56C6C">
+                              源系统用户id[{{ props.row.user_id }}] - 源系统sessionId[{{ props.row.session_id }}]
                             </el-col>
                           </el-row>
                         </template>
