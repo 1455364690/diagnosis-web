@@ -75,27 +75,27 @@
                                   <el-table-column
                                     prop="consume_time"
                                     label="耗时"
-                                    width="120">
+                                    width="80">
                                   </el-table-column>
                                   <el-table-column
                                     label="CPU"
-                                    width="120">
+                                    width="80">
                                     <template slot-scope="props">
-                                      {{props.row.consume_time}}
+                                      {{ countCPU(props.row.cpu_user_use,props.row.cpu_total) }}&nbsp;%
                                     </template>
                                   </el-table-column>
                                   <el-table-column
                                     label="内存"
-                                    width="120">
+                                    width="80">
                                     <template slot-scope="props">
-                                      {{props.row.consume_time}}
+                                      {{ countMemory(props.row.memory_free,props.row.memory_total)}}&nbsp;%
                                     </template>
                                   </el-table-column>
                                   <el-table-column
                                     label="JVM"
                                     width="120">
                                     <template slot-scope="props">
-                                      {{props.row.consume_time}}
+                                      {{ countJVM(props.row.jvm_mem_free,props.row.jvm_mem_total)}}&nbsp;%
                                     </template>
                                   </el-table-column>
                                 </el-table>
@@ -357,6 +357,15 @@ export default {
         message: message,
         type: 'warning'
       });
+    },
+    countCPU(use,total){
+      return  (100 * use/total).toFixed(2)
+    },
+    countMemory(free,total){
+      return (100 * (total-free)/total).toFixed(2)
+    },
+    countJVM(free,total){
+      return (100 * (total-free)/total).toFixed(2)
     },
     numberFormat(s) {
       return s < 10 ? '0' + s : s
