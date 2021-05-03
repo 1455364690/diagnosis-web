@@ -131,7 +131,10 @@
                       <el-table-column
                         label="操作">
                         <template slot-scope="scope">
-                          <el-button size="mini" type="primary"
+                          <el-button size="mini" type="primary" v-if="systemRunningStatus == 0"
+                                     @click="showUpdateMonitorConfigVisibleDialog(scope.row)">修改配置项
+                          </el-button>
+                          <el-button size="mini" type="primary" v-if="systemRunningStatus == 1" disabled
                                      @click="showUpdateMonitorConfigVisibleDialog(scope.row)">修改配置项
                           </el-button>
                           <!--                          <el-button size="mini" type="danger" @click="deleteMonitorConfig(scope.row)">删除</el-button>-->
@@ -504,6 +507,7 @@ export default {
 
     updateMonitorConfig() {
       console.log(this.monitorConfigItem)
+      this.hideUpdateMonitorConfigVisibleDialog()
       Http.post(Apis.MANAGE.UPDATE_MONITOR, this.monitorConfigItem).then(res => {
         this.showSuccessMessage('修改成功')
         this.queryMonitorConfigList()
@@ -535,6 +539,7 @@ export default {
     },
     addNormalAccessSequence() {
       console.log(this.multipleSelection)
+      this.hideAddNormalAccessSequenceDialog()
       Http.post(Apis.MANAGE.ADD_NORMAL_ACCESS_SEQUENCE, this.multipleSelection).then(res => {
         this.showSuccessMessage('添加用户访问序列成功')
         this.queryNormalAccessSequenceList()
@@ -594,8 +599,14 @@ export default {
       this.updateMonitorConfigVisible = true
       this.monitorConfigItem = row
     },
+    hideUpdateMonitorConfigVisibleDialog() {
+      this.updateMonitorConfigVisible = false
+    },
     showAddNormalAccessSequenceDialog() {
       this.addNormalAccessSequenceVisible = true
+    },
+    hideAddNormalAccessSequenceDialog(){
+      this.addNormalAccessSequenceVisible = false
     },
     cancel() {
       console.log('cancel')
