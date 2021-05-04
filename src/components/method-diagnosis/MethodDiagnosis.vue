@@ -1,6 +1,6 @@
 <template>
   <div style="width: 100%;">
-    <el-row :gutter="10" style="padding-top: 15px;">
+    <el-row v-loading="loading" :gutter="10" style="padding-top: 15px;">
       <el-col :span="2">
         <div class="grid-content"></div>
       </el-col>
@@ -20,7 +20,8 @@
               </el-date-picker>
             </el-col>
             <el-col :span="8">
-              <el-button type="primary" @click="startDiagnose" plain>开始诊断</el-button>
+              <el-button v-if="selectTime" type="primary" @click="startDiagnose" plain>开始诊断</el-button>
+              <el-button v-if="!selectTime" disabled type="primary" @click="startDiagnose" plain>开始诊断</el-button>
             </el-col>
           </el-row>
           <div class="panel panel-default">
@@ -169,7 +170,8 @@ export default {
       activeNames: ['1'],
       systemMethodDiagnoseResult: null,
       picture_rate: [],
-      picture_wrong_number: []
+      picture_wrong_number: [],
+      loading: false
     }
   },
   mounted() {
@@ -183,10 +185,18 @@ export default {
         return false
       }
     },
+    showLoading(){
+      this.loading = true
+    },
+    hideLoading(){
+      this.loading = false
+    },
     startDiagnose() {
+      this.showLoading()
       const startTime = this.dateFormat(this.selectTime[0])
-      const endTime = this.dateFormat(this.selectTime[0])
+      const endTime = this.dateFormat(this.selectTime[1])
       if (!this.checkTime(this.selectTime[0], this.selectTime[1])) {
+        this.hideLoading()
         return
       }
       const data = {
@@ -194,6 +204,7 @@ export default {
         endTime: endTime
       }
       Http.post(Apis.SYSTEM_METHOD.START_DIAGNOSE, data).then(res => {
+        this.hideLoading()
         if (res.success === true) {
           console.log(res.data)
           this.systemMethodDiagnoseResult = res.data.diagnose_result_list
@@ -202,11 +213,12 @@ export default {
           this.showSuccessMessage('诊断成功')
           this.myEcharts()
         } else {
-          console.log(error.message)
-          this.showErrorMessage(error.message)
+          console.log(res.message)
+          this.showErrorMessage(res.message)
         }
         // this.queryDiagnoseResult()
       }).catch(error => {
+        this.hideLoading()
         console.log(error.message)
         this.showErrorMessage(error.message)
       })
@@ -215,7 +227,7 @@ export default {
     },
     queryDiagnoseResult() {
       const startTime = this.dateFormat(this.selectTime[0])
-      const endTime = this.dateFormat(this.selectTime[0])
+      const endTime = this.dateFormat(this.selectTime[1])
       if (!checkTime(this.selectTime[0], this.selectTime[1])) {
         return
       }
@@ -268,7 +280,7 @@ export default {
           {
             name: '系统方法',
             type: 'pie',
-            radius: [30, 150],
+            radius: [20, 150],
             center: ['50%', '50%'],
             roseType: 'area',
             itemStyle: {

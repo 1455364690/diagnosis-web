@@ -1,6 +1,6 @@
 <template>
   <div style="width: 100%;">
-    <el-row :gutter="10" style="padding-top: 15px;">
+    <el-row :gutter="10" v-loading="loading" style="padding-top: 15px;">
       <el-col :span="2">
         <div class="grid-content"></div>
       </el-col>
@@ -20,7 +20,8 @@
               </el-date-picker>
             </el-col>
             <el-col :span="8">
-              <el-button type="primary" @click="startDiagnose" plain>开始诊断</el-button>
+              <el-button v-if="!selectTime" disabled type="primary" @click="startDiagnose" plain>开始诊断</el-button>
+              <el-button v-if="selectTime" type="primary" @click="startDiagnose" plain>开始诊断</el-button>
             </el-col>
           </el-row>
           <div class="panel panel-default">
@@ -155,6 +156,7 @@ export default {
       selectTime: '',
       currentPageSize: 10,
       currentPageNum: 1,
+      loading:false,
       methodInfoTotalNum: 10,
       timeLineColorMap: {
         0: '#409EFF',
@@ -199,9 +201,15 @@ export default {
         return false
       }
     },
+    showLoading(){
+      this.loading = true
+    },
+    hideLoading(){
+      this.loading = false
+    },
     startDiagnose() {
       const startTime = this.dateFormat(this.selectTime[0])
-      const endTime = this.dateFormat(this.selectTime[0])
+      const endTime = this.dateFormat(this.selectTime[1])
       if (!this.checkTime(this.selectTime[0], this.selectTime[1])) {
         return
       }
@@ -209,7 +217,9 @@ export default {
         startTime: startTime,
         endTime: endTime
       }
+      this.showLoading()
       Http.post(Apis.ACCESS_SEQUENCE.START_DIAGNOSE, data).then(res => {
+        this.hideLoading()
         if (res.success === true) {
           //this.queryDiagnoseResult()
           console.log(res.data)
@@ -221,6 +231,7 @@ export default {
           this.showErrorMessage(res.message)
         }
       }).catch(error => {
+        this.hideLoading()
         this.showErrorMessage('诊断失败，请重新尝试')
       })
     },
@@ -229,7 +240,7 @@ export default {
     },
     queryDiagnoseResult() {
       const startTime = this.dateFormat(this.selectTime[0])
-      const endTime = this.dateFormat(this.selectTime[0])
+      const endTime = this.dateFormat(this.selectTime[1])
       if (!this.checkTime(this.selectTime[0], this.selectTime[1])) {
         return
       }
