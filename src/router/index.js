@@ -6,10 +6,16 @@ import Trace from "@/components/trace/Trace";
 import Manager from "@/components/maneger/Manager";
 import UserDiagnosis from "@/components/user-diagnosis/UserDiagnosis";
 import MethodDiagnosis from "@/components/method-diagnosis/MethodDiagnosis";
+import XuyujieIndex from "@/components/xuyujie/XuyujieIndex";
 Vue.use(Router)
 
 export default new Router({
   routes: [
+    {
+      path: '/xuyujie',
+      name: 'XuyujieIndex',
+      component: XuyujieIndex
+    },
     {
       path: '/',
       name: 'Manager',
