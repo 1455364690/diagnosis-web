@@ -305,7 +305,7 @@ export default {
     this.queryDurationDataByCondition()
     this.queryMeanF0DataByCondition()
     this.queryExcursionSizeDataByCondition()
-    this.queryF0AccelerationDataByCondition()
+    //this.queryF0AccelerationDataByCondition()
   },
   methods: {
     queryDurationDataByCondition(){

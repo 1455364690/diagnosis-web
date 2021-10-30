@@ -46,6 +46,7 @@ export default {
   data() {
     return {
       fileList: [],
+      uploadFileList:[],
       file: {},
       upload_url: Apis.XUYUJIE.UPLOAD_TXT_FILE,
       analysedData: []
@@ -53,23 +54,27 @@ export default {
   },
   methods: {
     getFile(item) {
+      this.uploadFileList.push(item.file)
       console.log(item.file)
       this.file = item.file
     },
     submitUpload() {
-      const fd = new FormData()
-      fd.append('filename', this.file)
-      let config = {
-        //添加请求头
-        headers: {'Content-Type': 'multipart/form-data'},
-      }
-      console.log(this.file)
-      Http.upload(Apis.XUYUJIE.UPLOAD_TXT_FILE, fd, config).then(res => {
-        console.log(res)
-        this.getAnalyseResult(res.data)
-      }).catch(error => {
-        console.log(error)
-      })
+      var that = this
+      this.uploadFileList.forEach(function (item,index,arr){
+        const fd = new FormData()
+        fd.append('filename', item)
+        let config = {
+          //添加请求头
+          headers: {'Content-Type': 'multipart/form-data'},
+        }
+        Http.upload(Apis.XUYUJIE.UPLOAD_TXT_FILE, fd, config).then(res => {
+          console.log(res)
+          that.getAnalyseResult(res.data)
+        }).catch(error => {
+          console.log(error)
+        })
+      });
+
     },
     getAnalyseResult(fileName) {
       Http.get(Apis.XUYUJIE.GET_ANALYSE_TABLE_FORM_TXT_FILE.replace("{fileName}", fileName)).then(res => {
@@ -88,9 +93,16 @@ export default {
       })
     },
     handleRemove(file, fileList) {
+      console.log(file)
+        this.uploadFileList.forEach(function (item,index,arr){
+          if (item.uid == file.uid) {
+            arr.splice(index,1);
+          }
+        });
       //console.log(file, fileList);
     },
     handlePreview(file) {
+      this.uploadFileList.append(file)
       this.file = file;
     }
   }
