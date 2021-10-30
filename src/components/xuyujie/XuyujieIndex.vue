@@ -17,7 +17,7 @@
               <span slot="label"><i class="el-icon-date"></i> duration</span>
               <el-table
                 ref="multipleTable"
-                :data="tableData"
+                :data="durationTableData"
                 tooltip-effect="dark"
                 style="width: 100%"
                 @selection-change="handleSelectionChange">
@@ -71,6 +71,8 @@
                 background
                 layout="prev, pager, next"
                 :current-page="this.durationPageCurrNum"
+                @current-change="changeCurrPage"
+                :page-size="this.pageSize"
                 :total="this.durationPageTotal">
               </el-pagination>
             </el-tab-pane>
@@ -97,10 +99,13 @@
 </template>
 
 <script>
+import Apis from '@/js/api.js'
+import Http from '@/js/http.js'
 export default {
   name: "XuyujieIndex",
   data() {
     return {
+      pageSize:20,
       durationPageTotal: 1,
       durationPageCurrNum: 1,
       meanF0PageTotal: 1,
@@ -109,7 +114,10 @@ export default {
       f0AccelerationPageCurrNum: 1,
       excursionSizePageTotal: 1,
       excursionSizePageCurrNum: 1,
-      tableData: [{
+      meanF0TableData:[],
+      f0AccelerationTableData:[],
+      excursionSizeTableData:[],
+      durationTableData: [{
         userName: '2016-05-03',
         type: '2016-05-03',
         dataOne: '2016-05-03',
@@ -132,8 +140,26 @@ export default {
     }
   }
   ,
-
+  mounted() {
+    //获取duration数据
+    this.queryDurationDataByCondition()
+  },
   methods: {
+    queryDurationDataByCondition(){
+      let requestBody={
+        pageSize:this.pageSize,
+        pageNum:this.durationPageCurrNum - 1,
+        dataFileType:"duration",
+        userName:"test"
+      }
+      Http.post(Apis.XUYUJIE.QUERY_DATA_BY_CONDITION,requestBody).then(res=>{
+        console.log(res)
+        this.durationTableData = res.data
+        this.durationPageTotal = res.total
+      }).catch(error=>{
+        console.log(error)
+      })
+    },
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {
@@ -146,6 +172,10 @@ export default {
     ,
     handleSelectionChange(val) {
       this.multipleSelection = val;
+    },
+    changeCurrPage(item){
+      this.durationPageCurrNum = item
+      this.queryDurationDataByCondition()
     }
   }
 }

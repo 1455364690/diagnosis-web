@@ -42,6 +42,8 @@ export default {
     //GET,获取刚解析的文件数据
     GET_ANALYSE_TABLE_FORM_TXT_FILE:'api/xuyujie/get_analyse_table_from_txt_file/{fileName}',
     //POST,保存刚解析的文件数据
-    SAVE_ANALYSE_TABLE_FORM_TXT_FILE:'api/xuyujie/save_analyse_table_from_txt_file'
+    SAVE_ANALYSE_TABLE_FORM_TXT_FILE:'api/xuyujie/save_analyse_table_from_txt_file',
+    //POST,获取
+    QUERY_DATA_BY_CONDITION:'api/xuyujie/query_data_by_condition'
   }
 }

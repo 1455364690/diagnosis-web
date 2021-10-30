@@ -47,7 +47,8 @@ export default {
     return {
       fileList: [],
       file: {},
-      upload_url: Apis.XUYUJIE.UPLOAD_TXT_FILE
+      upload_url: Apis.XUYUJIE.UPLOAD_TXT_FILE,
+      analysedData: []
     }
   },
   methods: {
@@ -71,7 +72,16 @@ export default {
       })
     },
     getAnalyseResult(fileName) {
-      Http.get(Apis.XUYUJIE.GET_ANALYSE_TABLE_FORM_TXT_FILE.replace("{fileName}",fileName)).then(res => {
+      Http.get(Apis.XUYUJIE.GET_ANALYSE_TABLE_FORM_TXT_FILE.replace("{fileName}", fileName)).then(res => {
+        console.log(res)
+        this.analysedData = res.data
+        this.ensureSaveFile()
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    ensureSaveFile() {
+      Http.post(Apis.XUYUJIE.SAVE_ANALYSE_TABLE_FORM_TXT_FILE, this.analysedData).then(res => {
         console.log(res)
       }).catch(error => {
         console.log(error)
