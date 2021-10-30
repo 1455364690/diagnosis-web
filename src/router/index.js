@@ -7,10 +7,16 @@ import Manager from "@/components/maneger/Manager";
 import UserDiagnosis from "@/components/user-diagnosis/UserDiagnosis";
 import MethodDiagnosis from "@/components/method-diagnosis/MethodDiagnosis";
 import XuyujieIndex from "@/components/xuyujie/XuyujieIndex";
+import XuyujieUpload from "@/components/xuyujie/XuyujieUpload";
 Vue.use(Router)
 
 export default new Router({
   routes: [
+    {
+      path: '/xuyujie_upload',
+      name: 'XuyujieUpload',
+      component: XuyujieUpload
+    },
     {
       path: '/xuyujie',
       name: 'XuyujieIndex',

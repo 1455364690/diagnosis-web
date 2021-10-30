@@ -104,7 +104,7 @@ export default {
     return new Promise((resolve, reject) => {
       axios.post(handleUrl(url), data, config).then(
         (result) => {
-          resolve(result)
+          resolve(result.data)
         }
       ).catch(
         (error) => {
