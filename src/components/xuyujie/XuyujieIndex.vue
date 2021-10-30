@@ -71,22 +71,199 @@
                 background
                 layout="prev, pager, next"
                 :current-page="this.durationPageCurrNum"
-                @current-change="changeCurrPage"
+                @current-change="changeDurationCurrPage"
                 :page-size="this.pageSize"
                 :total="this.durationPageTotal">
               </el-pagination>
             </el-tab-pane>
             <el-tab-pane label="meanf0">
               <span slot="label"><i class="el-icon-date"></i> meanf0</span>
-              meanf0
+              <el-table
+                ref="multipleTable"
+                :data="meanF0TableData"
+                tooltip-effect="dark"
+                style="width: 100%"
+                @selection-change="handleSelectionChange">
+                <el-table-column
+                  type="selection"
+                  width="55">
+                </el-table-column>
+                <el-table-column
+                  label="姓名"
+                  width="120">
+                  <template slot-scope="scope">{{ scope.row.userName }}</template>
+                </el-table-column>
+                <el-table-column
+                  prop="type"
+                  label="类型"
+                  width="120">
+                </el-table-column>
+                <el-table-column
+                  prop="dataOne"
+                  label="data1"
+                  width="120">
+                </el-table-column>
+                <el-table-column
+                  prop="dataTwo"
+                  label="data2"
+                  width="120">
+                </el-table-column>
+                <el-table-column
+                  prop="dataThree"
+                  label="data3"
+                  width="120">
+                </el-table-column>
+                <el-table-column
+                  prop="dataFour"
+                  label="data4"
+                  width="120">
+                </el-table-column>
+                <el-table-column
+                  prop="dataFive"
+                  label="data5"
+                  width="120">
+                </el-table-column>
+                <el-table-column
+                  prop="dataSix"
+                  label="data6"
+                  width="120">
+                </el-table-column>
+              </el-table>
+              <br>
+              <el-pagination
+                background
+                layout="prev, pager, next"
+                :current-page="this.meanF0PageCurrNum"
+                @current-change="changeMeanF0CurrPage"
+                :page-size="this.pageSize"
+                :total="this.meanF0PageTotal">
+              </el-pagination>
             </el-tab-pane>
             <el-tab-pane label="f0acceleration">
               <span slot="label"><i class="el-icon-date"></i> f0acceleration</span>
-              f0acceleration
+              <el-table
+                ref="multipleTable"
+                :data="f0AccelerationTableData"
+                tooltip-effect="dark"
+                style="width: 100%"
+                @selection-change="handleSelectionChange">
+                <el-table-column
+                  type="selection"
+                  width="55">
+                </el-table-column>
+                <el-table-column
+                  label="姓名"
+                  width="120">
+                  <template slot-scope="scope">{{ scope.row.userName }}</template>
+                </el-table-column>
+                <el-table-column
+                  prop="type"
+                  label="类型"
+                  width="120">
+                </el-table-column>
+                <el-table-column
+                  prop="dataOne"
+                  label="data1"
+                  width="120">
+                </el-table-column>
+                <el-table-column
+                  prop="dataTwo"
+                  label="data2"
+                  width="120">
+                </el-table-column>
+                <el-table-column
+                  prop="dataThree"
+                  label="data3"
+                  width="120">
+                </el-table-column>
+                <el-table-column
+                  prop="dataFour"
+                  label="data4"
+                  width="120">
+                </el-table-column>
+                <el-table-column
+                  prop="dataFive"
+                  label="data5"
+                  width="120">
+                </el-table-column>
+                <el-table-column
+                  prop="dataSix"
+                  label="data6"
+                  width="120">
+                </el-table-column>
+              </el-table>
+              <br>
+              <el-pagination
+                background
+                layout="prev, pager, next"
+                :current-page="this.f0AccelerationPageCurrNum"
+                @current-change="changeF0AccelerationCurrPage"
+                :page-size="this.pageSize"
+                :total="this.f0AccelerationPageTotal">
+              </el-pagination>
             </el-tab-pane>
             <el-tab-pane label="excursionsize">
               <span slot="label"><i class="el-icon-date"></i> excursionsize</span>
-              excursionsize
+              <el-table
+                ref="multipleTable"
+                :data="excursionSizeTableData"
+                tooltip-effect="dark"
+                style="width: 100%"
+                @selection-change="handleSelectionChange">
+                <el-table-column
+                  type="selection"
+                  width="55">
+                </el-table-column>
+                <el-table-column
+                  label="姓名"
+                  width="120">
+                  <template slot-scope="scope">{{ scope.row.userName }}</template>
+                </el-table-column>
+                <el-table-column
+                  prop="type"
+                  label="类型"
+                  width="120">
+                </el-table-column>
+                <el-table-column
+                  prop="dataOne"
+                  label="data1"
+                  width="120">
+                </el-table-column>
+                <el-table-column
+                  prop="dataTwo"
+                  label="data2"
+                  width="120">
+                </el-table-column>
+                <el-table-column
+                  prop="dataThree"
+                  label="data3"
+                  width="120">
+                </el-table-column>
+                <el-table-column
+                  prop="dataFour"
+                  label="data4"
+                  width="120">
+                </el-table-column>
+                <el-table-column
+                  prop="dataFive"
+                  label="data5"
+                  width="120">
+                </el-table-column>
+                <el-table-column
+                  prop="dataSix"
+                  label="data6"
+                  width="120">
+                </el-table-column>
+              </el-table>
+              <br>
+              <el-pagination
+                background
+                layout="prev, pager, next"
+                :current-page="this.excursionSizePageCurrNum"
+                @current-change="changeExcursionSizeCurrPage"
+                :page-size="this.pageSize"
+                :total="this.excursionSizePageTotal">
+              </el-pagination>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -117,32 +294,18 @@ export default {
       meanF0TableData:[],
       f0AccelerationTableData:[],
       excursionSizeTableData:[],
-      durationTableData: [{
-        userName: '2016-05-03',
-        type: '2016-05-03',
-        dataOne: '2016-05-03',
-        dataTwo: '王小虎',
-        dataThree: '上海市普陀区金沙江路 1518 弄',
-        dataFour: '上海市普陀区金沙江路 1518 弄',
-        dataFive: '上海市普陀区金沙江路 1518 弄',
-        dataSix: '上海市普陀区金沙江路 1518 弄',
-      }, {
-        userName: '2016-05-03',
-        type: '2016-05-03',
-        dataOne: '2016-05-03',
-        dataTwo: '王小虎',
-        dataThree: '上海市普陀区金沙江路 1518 弄',
-        dataFour: '上海市普陀区金沙江路 1518 弄',
-        dataFive: '上海市普陀区金沙江路 1518 弄',
-        dataSix: '上海市普陀区金沙江路 1518 弄',
-      }],
-      multipleSelection: []
+      durationTableData: [],
+      multipleSelection: [],
+      userName:"test"
     }
   }
   ,
   mounted() {
     //获取duration数据
     this.queryDurationDataByCondition()
+    this.queryMeanF0DataByCondition()
+    this.queryExcursionSizeDataByCondition()
+    this.queryF0AccelerationDataByCondition()
   },
   methods: {
     queryDurationDataByCondition(){
@@ -150,12 +313,57 @@ export default {
         pageSize:this.pageSize,
         pageNum:this.durationPageCurrNum - 1,
         dataFileType:"duration",
-        userName:"test"
+        userName:this.userName
       }
       Http.post(Apis.XUYUJIE.QUERY_DATA_BY_CONDITION,requestBody).then(res=>{
         console.log(res)
         this.durationTableData = res.data
         this.durationPageTotal = res.total
+      }).catch(error=>{
+        console.log(error)
+      })
+    },
+    queryMeanF0DataByCondition(){
+      let requestBody={
+        pageSize:this.pageSize,
+        pageNum:this.durationPageCurrNum - 1,
+        dataFileType:"meanf0",
+        userName:this.userName
+      }
+      Http.post(Apis.XUYUJIE.QUERY_DATA_BY_CONDITION,requestBody).then(res=>{
+        console.log(res)
+        this.meanF0TableData = res.data
+        this.meanF0PageTotal = res.total
+      }).catch(error=>{
+        console.log(error)
+      })
+    },
+    queryF0AccelerationDataByCondition(){
+      let requestBody={
+        pageSize:this.pageSize,
+        pageNum:this.durationPageCurrNum - 1,
+        dataFileType:"f0acceleration",
+        userName:this.userName
+      }
+      Http.post(Apis.XUYUJIE.QUERY_DATA_BY_CONDITION,requestBody).then(res=>{
+        console.log(res)
+        this.f0AccelerationTableData = res.data
+        this.f0AccelerationPageTotal = res.total
+      }).catch(error=>{
+        console.log(error)
+      })
+    },
+    queryExcursionSizeDataByCondition(){
+      let requestBody={
+        pageSize:this.pageSize,
+        pageNum:this.durationPageCurrNum - 1,
+        dataFileType:"excursionsize",
+        userName:this.userName
+      }
+      Http.post(Apis.XUYUJIE.QUERY_DATA_BY_CONDITION,requestBody).then(res=>{
+        console.log(res)
+        this.excursionSizeTableData = res.data
+        this.excursionSizePageTotal = res.total
       }).catch(error=>{
         console.log(error)
       })
@@ -173,9 +381,21 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-    changeCurrPage(item){
+    changeDurationCurrPage(item){
       this.durationPageCurrNum = item
       this.queryDurationDataByCondition()
+    },
+    changeMeanF0CurrPage(item){
+      this.meanF0PageCurrNum = item
+      this.queryMeanF0DataByCondition()
+    },
+    changeF0AccelerationCurrPage(item){
+      this.f0AccelerationPageCurrNum = item
+      this.queryF0AccelerationDataByCondition()
+    },
+    changeExcursionSizeCurrPage(item){
+      this.excursionSizePageCurrNum = item
+      this.queryExcursionSizeDataByCondition()
     }
   }
 }
