@@ -537,6 +537,28 @@ export default {
       })
     },
     outputSelectedData() {
+      let data = {
+        dataList:null,
+        dataType:null
+      }
+      if (this.activeName == 0){
+        data.dataList = this.multipleDurationSelection
+        data.dataType = 'duration'
+      }else if (this.activeName == 1){
+        data.dataList = this.multipleMeanF0Selection
+        data.dataType = 'meanf0'
+      }else if (this.activeName == 2){
+        data.dataList = this.multipleF0AccelerationSelection
+        data.dataType = 'f0acceleration'
+      }else if (this.activeName == 3){
+        data.dataList = this.multipleExcursionSizeSelection
+        data.dataType = 'excursionsize'
+      }
+      Http.post(Apis.XUYUJIE.DOWNLOAD_SELECTED_DATA,data).then(res=>{
+        console.log(res)
+      }).catch(error=>{
+        console.log(error)
+      })
       console.log("outputSelectedData")
     },
   }
