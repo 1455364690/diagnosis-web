@@ -1,6 +1,6 @@
 <template>
 
-  <div v-loading="loading" element-loading-text="文件解析中..."
+  <div v-loading="loading" :element-loading-text="this.loadingText"
        element-loading-spinner="el-icon-loading">
     <el-row>
       <el-col :span="18">
@@ -68,11 +68,15 @@ export default {
   data() {
     return {
       loading:false,
+      loadingText:"",
+      loadingAnalysing:"正在解析文件中...",
+      loadingInserting:"正在保存数据中...",
       fileList: [],
       uploadFileList:[],
       file: {},
       upload_url: Apis.XUYUJIE.UPLOAD_TXT_FILE,
-      analysedData: []
+      analysedData: [],
+      uploadUserName:"test"
     }
   },
   methods: {
@@ -85,7 +89,8 @@ export default {
         type: 'success'
       });
     },
-    showLoading(){
+    showLoading(text){
+      this.loadingText = text
       this.loading = true;
     },
     hideLoading(){
@@ -100,7 +105,7 @@ export default {
       var that = this
 
       this.uploadFileList.forEach(function (item,index,arr){
-        that.showLoading()
+        that.showLoading(that.loadingAnalysing)
         const fd = new FormData()
         fd.append('filename', item)
         let config = {
@@ -119,15 +124,20 @@ export default {
     },
     getAnalyseResult(fileName) {
       Http.get(Apis.XUYUJIE.GET_ANALYSE_TABLE_FORM_TXT_FILE.replace("{fileName}", fileName)).then(res => {
-        console.log(res)
         this.analysedData = res.data
-        this.ensureSaveFile()
+        this.hideLoading()
+        this.openEnsureWindow()
       }).catch(error => {
         console.log(error)
         this.hideLoading()
       })
     },
     ensureSaveFile() {
+      var that = this
+      that.showLoading(that.loadingInserting)
+      this.analysedData.forEach(function (item,index,arr){
+        item.userName = that.uploadUserName
+      })
       Http.post(Apis.XUYUJIE.SAVE_ANALYSE_TABLE_FORM_TXT_FILE, this.analysedData).then(res => {
         console.log(res)
         this.success("文件上传成功")
@@ -149,6 +159,25 @@ export default {
     handlePreview(file) {
       this.uploadFileList.append(file)
       this.file = file;
+    },
+    openEnsureWindow() {
+      var that = this;
+      this.$prompt('请输入该人姓名', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+      }).then(({ value }) => {
+        that.uploadUserName = value
+        this.$message({
+          type: 'success',
+          message: '你输入的姓名是: ' + value
+        });
+        that.ensureSaveFile()
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '未输入，取消上传'
+        });
+      });
     }
   }
 }
