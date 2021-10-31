@@ -397,7 +397,7 @@ export default {
         pageSize: this.pageSize,
         pageNum: this.durationPageCurrNum - 1,
         dataFileType: "duration",
-        userName: this.userName == null ? "test" : this.userName
+        userName: this.userName
       }
       Http.post(Apis.XUYUJIE.QUERY_DATA_BY_CONDITION, requestBody).then(res => {
         console.log(res)
@@ -410,9 +410,9 @@ export default {
     queryMeanF0DataByCondition() {
       let requestBody={
         pageSize:this.pageSize,
-        pageNum:this.durationPageCurrNum - 1,
+        pageNum:this.meanF0PageCurrNum - 1,
         dataFileType:"meanf0",
-        userName: this.userName == null ? "test" : this.userName
+        userName: this.userName
       }
       Http.post(Apis.XUYUJIE.QUERY_DATA_BY_CONDITION,requestBody).then(res=>{
         console.log(res)
@@ -425,9 +425,9 @@ export default {
     queryF0AccelerationDataByCondition(){
       let requestBody={
         pageSize:this.pageSize,
-        pageNum:this.durationPageCurrNum - 1,
+        pageNum:this.f0AccelerationPageCurrNum - 1,
         dataFileType:"f0acceleration",
-        userName: this.userName == null ? "test" : this.userName
+        userName: this.userName
       }
       Http.post(Apis.XUYUJIE.QUERY_DATA_BY_CONDITION,requestBody).then(res=>{
         console.log(res)
@@ -440,9 +440,9 @@ export default {
     queryExcursionSizeDataByCondition(){
       let requestBody={
         pageSize:this.pageSize,
-        pageNum:this.durationPageCurrNum - 1,
+        pageNum:this.excursionSizePageCurrNum - 1,
         dataFileType:"excursionsize",
-        userName: this.userName == null ? "test" : this.userName
+        userName: this.userName
       }
       Http.post(Apis.XUYUJIE.QUERY_DATA_BY_CONDITION,requestBody).then(res=>{
         console.log(res)
