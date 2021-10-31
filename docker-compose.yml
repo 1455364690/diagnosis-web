@@ -3,9 +3,9 @@ services:
   diagnose-backend:
     restart: always
     container_name: diagnose-backend
-    image: diagnosis:latest
+    image: diagnose-backend:latest
     ports:
-      - 8000:8000
+      - 8080:8080
   diagnose-frontend:
     restart: always
     container_name: diagnose-frontend

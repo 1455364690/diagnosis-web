@@ -2,15 +2,28 @@
 
   <div>
     <el-row>
-      <el-col :span="24">
+      <el-col :span="18">
+        <div class="grid-content">
+
+        </div>
+      </el-col>
+      <el-col :span="3">
+        <div class="grid-content" style="margin-top: 20px">
+          <router-link
+            :to="{ name: 'XuyujieUpload'}">
+            <el-button class="btn-home-apply" type="primary">去上传文件</el-button>
+          </router-link>
+        </div>
+      </el-col>
+      <el-col :span="1">
         <div class="grid-content"></div>
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="6">
+      <el-col :span="2">
         <div class="grid-content"></div>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="20">
         <div class="grid-content">
           <el-tabs type="border-card">
             <el-tab-pane label="duration">
@@ -268,7 +281,7 @@
           </el-tabs>
         </div>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="2">
         <div class="grid-content"></div>
       </el-col>
     </el-row>
