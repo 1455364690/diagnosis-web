@@ -1,17 +1,63 @@
 <template>
 
   <div>
-    <el-row>
-      <el-col :span="18">
+    <el-row style="margin-top: 20px">
+      <el-col :span="3">
         <div class="grid-content">
 
         </div>
       </el-col>
       <el-col :span="3">
-        <div class="grid-content" style="margin-top: 20px">
+        <div class="grid-content">
+          <el-input
+            placeholder="请输入姓名进行搜索"
+            v-model="userName"
+            maxlength="10"
+            clearable>
+          </el-input>
+        </div>
+      </el-col>
+      <el-col :span="1">
+        <div class="grid-content">
+
+        </div>
+      </el-col>
+      <el-col :span="2">
+        <div class="grid-content">
+          <el-button type="primary" icon="el-icon-search" @click="this.justQueryActiveOne">只搜索{{
+              this.activeTabName
+            }}
+          </el-button>
+        </div>
+      </el-col>
+      <el-col :span="1">
+        <div class="grid-content">
+
+        </div>
+      </el-col>
+      <el-col :span="4">
+        <div class="grid-content">
+          <el-button type="primary" icon="el-icon-search" @click="this.queryAll">搜索全部</el-button>
+        </div>
+      </el-col>
+      <el-col :span="1">
+        <div class="grid-content">
+          <el-button v-if="!this.selected" type="warning" icon="el-icon-upload2" @click="this.outputAllData">
+            导出{{ this.activeTabName }}内容
+          </el-button>
+          <el-button v-if="this.selected" type="warning" icon="el-icon-upload2" @click="this.outputSelectedData">导出选中内容
+          </el-button>
+        </div>
+      </el-col>
+      <el-col :span="2">
+        <div class="grid-content">
+        </div>
+      </el-col>
+      <el-col :span="3">
+        <div class="grid-content">
           <router-link
             :to="{ name: 'XuyujieUpload'}">
-            <el-button class="btn-home-apply" type="primary">去上传文件</el-button>
+            <el-button class="btn-home-apply" type="success">去上传文件</el-button>
           </router-link>
         </div>
       </el-col>
@@ -25,7 +71,7 @@
       </el-col>
       <el-col :span="20">
         <div class="grid-content">
-          <el-tabs type="border-card">
+          <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="duration">
               <span slot="label"><i class="el-icon-date"></i> duration</span>
               <el-table
@@ -33,7 +79,7 @@
                 :data="durationTableData"
                 tooltip-effect="dark"
                 style="width: 100%"
-                @selection-change="handleSelectionChange">
+                @selection-change="handleDurationSelectionChange">
                 <el-table-column
                   type="selection"
                   width="55">
@@ -96,7 +142,7 @@
                 :data="meanF0TableData"
                 tooltip-effect="dark"
                 style="width: 100%"
-                @selection-change="handleSelectionChange">
+                @selection-change="handleMeanF0SelectionChange">
                 <el-table-column
                   type="selection"
                   width="55">
@@ -159,7 +205,7 @@
                 :data="f0AccelerationTableData"
                 tooltip-effect="dark"
                 style="width: 100%"
-                @selection-change="handleSelectionChange">
+                @selection-change="handleF0AccelerationSelectionChange">
                 <el-table-column
                   type="selection"
                   width="55">
@@ -222,7 +268,7 @@
                 :data="excursionSizeTableData"
                 tooltip-effect="dark"
                 style="width: 100%"
-                @selection-change="handleSelectionChange">
+                @selection-change="handleExcursionSizeSelectionChange">
                 <el-table-column
                   type="selection"
                   width="55">
@@ -291,11 +337,16 @@
 <script>
 import Apis from '@/js/api.js'
 import Http from '@/js/http.js'
+
 export default {
   name: "XuyujieIndex",
   data() {
     return {
-      pageSize:20,
+      outputText: "导出",
+      selected: false,
+      activeName: 0,
+      activeTabName: "duration",
+      pageSize: 20,
       durationPageTotal: 1,
       durationPageCurrNum: 1,
       meanF0PageTotal: 1,
@@ -304,12 +355,15 @@ export default {
       f0AccelerationPageCurrNum: 1,
       excursionSizePageTotal: 1,
       excursionSizePageCurrNum: 1,
-      meanF0TableData:[],
-      f0AccelerationTableData:[],
-      excursionSizeTableData:[],
+      meanF0TableData: [],
+      f0AccelerationTableData: [],
+      excursionSizeTableData: [],
       durationTableData: [],
-      multipleSelection: [],
-      userName:"test"
+      multipleDurationSelection: [],
+      multipleMeanF0Selection: [],
+      multipleF0AccelerationSelection: [],
+      multipleExcursionSizeSelection: [],
+      userName: null
     }
   }
   ,
@@ -321,27 +375,44 @@ export default {
     //this.queryF0AccelerationDataByCondition()
   },
   methods: {
-    queryDurationDataByCondition(){
-      let requestBody={
-        pageSize:this.pageSize,
-        pageNum:this.durationPageCurrNum - 1,
-        dataFileType:"duration",
-        userName:this.userName
+    justQueryActiveOne() {
+      if (this.activeName == 0) {
+        this.queryDurationDataByCondition()
+      } else if (this.activeName == 1) {
+        this.queryMeanF0DataByCondition()
+      } else if (this.activeName == 2) {
+        this.queryF0AccelerationDataByCondition()
+      } else if (this.activeName == 3) {
+        this.queryExcursionSizeDataByCondition()
       }
-      Http.post(Apis.XUYUJIE.QUERY_DATA_BY_CONDITION,requestBody).then(res=>{
+    },
+    queryAll() {
+      this.queryDurationDataByCondition()
+      this.queryMeanF0DataByCondition()
+      this.queryF0AccelerationDataByCondition()
+      this.queryExcursionSizeDataByCondition()
+    },
+    queryDurationDataByCondition() {
+      let requestBody = {
+        pageSize: this.pageSize,
+        pageNum: this.durationPageCurrNum - 1,
+        dataFileType: "duration",
+        userName: this.userName == null ? "test" : this.userName
+      }
+      Http.post(Apis.XUYUJIE.QUERY_DATA_BY_CONDITION, requestBody).then(res => {
         console.log(res)
         this.durationTableData = res.data
         this.durationPageTotal = res.total
-      }).catch(error=>{
+      }).catch(error => {
         console.log(error)
       })
     },
-    queryMeanF0DataByCondition(){
+    queryMeanF0DataByCondition() {
       let requestBody={
         pageSize:this.pageSize,
         pageNum:this.durationPageCurrNum - 1,
         dataFileType:"meanf0",
-        userName:this.userName
+        userName: this.userName == null ? "test" : this.userName
       }
       Http.post(Apis.XUYUJIE.QUERY_DATA_BY_CONDITION,requestBody).then(res=>{
         console.log(res)
@@ -356,7 +427,7 @@ export default {
         pageSize:this.pageSize,
         pageNum:this.durationPageCurrNum - 1,
         dataFileType:"f0acceleration",
-        userName:this.userName
+        userName: this.userName == null ? "test" : this.userName
       }
       Http.post(Apis.XUYUJIE.QUERY_DATA_BY_CONDITION,requestBody).then(res=>{
         console.log(res)
@@ -371,7 +442,7 @@ export default {
         pageSize:this.pageSize,
         pageNum:this.durationPageCurrNum - 1,
         dataFileType:"excursionsize",
-        userName:this.userName
+        userName: this.userName == null ? "test" : this.userName
       }
       Http.post(Apis.XUYUJIE.QUERY_DATA_BY_CONDITION,requestBody).then(res=>{
         console.log(res)
@@ -391,24 +462,70 @@ export default {
       }
     }
     ,
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
+    handleDurationSelectionChange(val) {
+      this.multipleDurationSelection = val;
+      if (val.length == 0) {
+        this.selected = false;
+      } else {
+        this.selected = true;
+      }
     },
-    changeDurationCurrPage(item){
+    handleMeanF0SelectionChange(val) {
+      this.multipleMeanF0Selection = val;
+      if (val.length == 0) {
+        this.selected = false;
+      } else {
+        this.selected = true;
+      }
+    },
+    handleF0AccelerationSelectionChange(val) {
+      this.multipleF0AccelerationSelection = val;
+      if (val.length == 0) {
+        this.selected = false;
+      } else {
+        this.selected = true;
+      }
+    },
+    handleExcursionSizeSelectionChange(val) {
+      this.multipleExcursionSizeSelection = val;
+      if (val.length == 0) {
+        this.selected = false;
+      } else {
+        this.selected = true;
+      }
+    },
+    changeDurationCurrPage(item) {
       this.durationPageCurrNum = item
       this.queryDurationDataByCondition()
     },
-    changeMeanF0CurrPage(item){
+    changeMeanF0CurrPage(item) {
       this.meanF0PageCurrNum = item
       this.queryMeanF0DataByCondition()
     },
-    changeF0AccelerationCurrPage(item){
+    changeF0AccelerationCurrPage(item) {
       this.f0AccelerationPageCurrNum = item
       this.queryF0AccelerationDataByCondition()
     },
-    changeExcursionSizeCurrPage(item){
+    changeExcursionSizeCurrPage(item) {
       this.excursionSizePageCurrNum = item
       this.queryExcursionSizeDataByCondition()
+    },
+    handleClick(tab, event) {
+      if (this.activeName == 0) {
+        this.activeTabName = "duration"
+      } else if (this.activeName == 1) {
+        this.activeTabName = "meanf0"
+      } else if (this.activeName == 2) {
+        this.activeTabName = "f0acceleration"
+      } else if (this.activeName == 3) {
+        this.activeTabName = "excursionsize"
+      }
+    },
+    outputAllData(){
+      console.log("outputAllData")
+    },
+    outputSelectedData(){
+      console.log("outputSelectedData")
     }
   }
 }
