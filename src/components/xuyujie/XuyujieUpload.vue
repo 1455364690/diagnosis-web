@@ -33,7 +33,7 @@
               <el-upload
                 class="upload-demo"
                 ref="upload"
-                action=""
+                action="sss"
                 name="file"
                 :on-preview="handlePreview"
                 :on-remove="handleRemove"
@@ -41,7 +41,7 @@
                 :file-list="fileList"
                 :multiple="true"
                 :http-request="getFile"
-                :auto-upload="true">
+                :auto-upload="false">
                 <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
                 <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
                 <div slot="tip" class="el-upload__tip">只能上传txt文件</div>
@@ -185,8 +185,13 @@ export default {
 
 <style scoped>
 @import url("//unpkg.com/element-ui@2.15.6/lib/theme-chalk/index.css");
+.upload-demo /deep/ input {
+  display: none;
+}
 .upload-demo {
-  width: 360px;
+}
+.upload-demo input{
+  display: none !important;
 }
 .el-upload__input input {
   display: none !important;
