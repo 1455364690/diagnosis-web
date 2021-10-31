@@ -10,6 +10,8 @@ services:
     restart: always
     container_name: diagnose-frontend
     image: diagnose-web:latest
+    volumes:
+      - /var/www:/var/www
     depends_on:
       - diagnose-backend
     ports:

@@ -38,12 +38,14 @@ export default {
     // POST,获取表格数据
     GET_TABLE_DATA_BY_MENU_AND_PAGE: 'api/xuyujie/get_table_data_by_menu_and_page',
     //POST,上传文件
-    UPLOAD_TXT_FILE:'api/xuyujie/upload_txt_file',
+    UPLOAD_TXT_FILE: 'api/xuyujie/upload_txt_file',
     //GET,获取刚解析的文件数据
-    GET_ANALYSE_TABLE_FORM_TXT_FILE:'api/xuyujie/get_analyse_table_from_txt_file/{fileName}',
+    GET_ANALYSE_TABLE_FORM_TXT_FILE: 'api/xuyujie/get_analyse_table_from_txt_file/{fileName}',
     //POST,保存刚解析的文件数据
-    SAVE_ANALYSE_TABLE_FORM_TXT_FILE:'api/xuyujie/save_analyse_table_from_txt_file',
+    SAVE_ANALYSE_TABLE_FORM_TXT_FILE: 'api/xuyujie/save_analyse_table_from_txt_file',
     //POST,获取
-    QUERY_DATA_BY_CONDITION:'api/xuyujie/query_data_by_condition'
+    QUERY_DATA_BY_CONDITION: 'api/xuyujie/query_data_by_condition',
+    //POST,获取下载链接
+    DOWNLOAD_ALL_DATA_BY_CONDITION: 'api/xuyuejie/download_all_data_by_condition'
   }
 }

@@ -521,12 +521,24 @@ export default {
         this.activeTabName = "excursionsize"
       }
     },
-    outputAllData(){
+    outputAllData() {
       console.log("outputAllData")
+      let requestBody = {
+        pageSize: this.pageSize,
+        pageNum: this.f0AccelerationPageCurrNum - 1,
+        dataFileType: this.activeTabName,
+        userName: this.userName
+      }
+      Http.post(Apis.XUYUJIE.DOWNLOAD_ALL_DATA_BY_CONDITION,requestBody).then(res=>{
+        console.log(res)
+        window.open(res.data, '_blank')
+      }).catch(error=>{
+        console.log(error)
+      })
     },
-    outputSelectedData(){
+    outputSelectedData() {
       console.log("outputSelectedData")
-    }
+    },
   }
 }
 </script>

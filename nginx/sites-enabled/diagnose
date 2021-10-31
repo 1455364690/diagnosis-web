@@ -8,7 +8,7 @@ server {
         error_log  /etc/nginx/logs/mooctest_site.error.log error;
         location /download/ {
           root       /var/www/;
-                      if ($request_filename ~* ^.*?\.(txt|doc|pdf|rar|gz|zip|docx|exe|xlsx|ppt|pptx|apk|xml|zip|rar)$){
+                      if ($request_filename ~* ^.*?\.(txt|xls|doc|pdf|rar|gz|zip|docx|exe|xlsx|ppt|pptx|apk|xml|zip|rar)$){
                   add_header Content-Disposition: 'attachment;';
                   }
         }
