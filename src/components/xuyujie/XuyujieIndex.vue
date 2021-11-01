@@ -556,6 +556,7 @@ export default {
       }
       Http.post(Apis.XUYUJIE.DOWNLOAD_SELECTED_DATA,data).then(res=>{
         console.log(res)
+        window.open(res.data, '_blank')
       }).catch(error=>{
         console.log(error)
       })
