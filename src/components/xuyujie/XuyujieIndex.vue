@@ -35,9 +35,16 @@
 
         </div>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="2">
         <div class="grid-content">
           <el-button type="primary" icon="el-icon-search" @click="this.queryAll">搜索全部</el-button>
+        </div>
+      </el-col>
+      <el-col :span="2">
+        <div class="grid-content">
+          <el-button type="warning" icon="el-icon-upload2" @click="this.outputAllFourData">
+            导出所有内容
+          </el-button>
         </div>
       </el-col>
       <el-col :span="1">
@@ -198,8 +205,8 @@
                 :total="this.meanF0PageTotal">
               </el-pagination>
             </el-tab-pane>
-            <el-tab-pane label="f0acceleration">
-              <span slot="label"><i class="el-icon-date"></i> f0acceleration</span>
+            <el-tab-pane label="finalvelocity">
+              <span slot="label"><i class="el-icon-date"></i> finalvelocity</span>
               <el-table
                 ref="multipleTable"
                 :data="f0AccelerationTableData"
@@ -372,7 +379,7 @@ export default {
     this.queryDurationDataByCondition()
     this.queryMeanF0DataByCondition()
     this.queryExcursionSizeDataByCondition()
-    //this.queryF0AccelerationDataByCondition()
+    this.queryF0AccelerationDataByCondition()
   },
   methods: {
     justQueryActiveOne() {
@@ -426,7 +433,7 @@ export default {
       let requestBody={
         pageSize:this.pageSize,
         pageNum:this.f0AccelerationPageCurrNum - 1,
-        dataFileType:"f0acceleration",
+        dataFileType:"finalvelocity",
         userName: this.userName
       }
       Http.post(Apis.XUYUJIE.QUERY_DATA_BY_CONDITION,requestBody).then(res=>{
@@ -516,7 +523,7 @@ export default {
       } else if (this.activeName == 1) {
         this.activeTabName = "meanf0"
       } else if (this.activeName == 2) {
-        this.activeTabName = "f0acceleration"
+        this.activeTabName = "finalvelocity"
       } else if (this.activeName == 3) {
         this.activeTabName = "excursionsize"
       }
@@ -536,6 +543,21 @@ export default {
         console.log(error)
       })
     },
+    outputAllFourData() {
+      console.log("outputAllFourData")
+      let requestBody = {
+        pageSize: this.pageSize,
+        pageNum: this.f0AccelerationPageCurrNum - 1,
+        dataFileType: this.activeTabName,
+        userName: this.userName
+      }
+      Http.post(Apis.XUYUJIE.DOWNLOAD_ALL_FOUR_DATA_BY_CONDITION,requestBody).then(res=>{
+        console.log(res)
+        window.open(res.data, '_blank')
+      }).catch(error=>{
+        console.log(error)
+      })
+    },
     outputSelectedData() {
       let data = {
         dataList:null,
@@ -549,7 +571,7 @@ export default {
         data.dataType = 'meanf0'
       }else if (this.activeName == 2){
         data.dataList = this.multipleF0AccelerationSelection
-        data.dataType = 'f0acceleration'
+        data.dataType = 'finalvelocity'
       }else if (this.activeName == 3){
         data.dataList = this.multipleExcursionSizeSelection
         data.dataType = 'excursionsize'

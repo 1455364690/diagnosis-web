@@ -41,7 +41,7 @@
                 :file-list="fileList"
                 :multiple="true"
                 :http-request="getFile"
-                :auto-upload="false">
+                :auto-upload="true">
                 <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
                 <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
                 <div slot="tip" class="el-upload__tip">只能上传txt文件</div>
@@ -102,6 +102,7 @@ export default {
       this.file = item.file
     },
     submitUpload() {
+      console.log(this.uploadFileList)
       var that = this
 
       this.uploadFileList.forEach(function (item,index,arr){

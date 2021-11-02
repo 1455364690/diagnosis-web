@@ -47,6 +47,8 @@ export default {
     QUERY_DATA_BY_CONDITION: 'api/xuyujie/query_data_by_condition',
     //POST,获取下载链接
     DOWNLOAD_ALL_DATA_BY_CONDITION: 'api/xuyuejie/download_all_data_by_condition',
+    //POST,获取所有数据下载链接
+    DOWNLOAD_ALL_FOUR_DATA_BY_CONDITION: 'api/xuyuejie/download_all_four_data_by_condition',
     //POST,获取部分数据的下载链接
     DOWNLOAD_SELECTED_DATA:'api/xuyuejie/download_selected_data',
   }
