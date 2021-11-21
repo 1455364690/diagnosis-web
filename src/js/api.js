@@ -50,6 +50,13 @@ export default {
     //POST,获取所有数据下载链接
     DOWNLOAD_ALL_FOUR_DATA_BY_CONDITION: 'api/xuyuejie/download_all_four_data_by_condition',
     //POST,获取部分数据的下载链接
-    DOWNLOAD_SELECTED_DATA:'api/xuyuejie/download_selected_data',
+    DOWNLOAD_SELECTED_DATA: 'api/xuyuejie/download_selected_data',
+    //POST
+    UPLOAD_TXT_FILE_AVG: 'api/xuyujie/upload_txt_file/cal_avg',
+    //GET
+    CAL_AVG: 'api/xuyujie/cal_avg',
+    CAL_AVG_STEP2: 'api/xuyujie/cal_avg_step2',
+    //POST
+    DOWNLOAD_CAL_AVG:'api/xuyujie/cal_avg/download'
   }
 }

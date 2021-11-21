@@ -8,6 +8,7 @@ import UserDiagnosis from "@/components/user-diagnosis/UserDiagnosis";
 import MethodDiagnosis from "@/components/method-diagnosis/MethodDiagnosis";
 import XuyujieIndex from "@/components/xuyujie/XuyujieIndex";
 import XuyujieUpload from "@/components/xuyujie/XuyujieUpload";
+import XuyujieAvg from "@/components/xuyujie/XuyujieAvg";
 Vue.use(Router)
 
 export default new Router({
@@ -21,6 +22,11 @@ export default new Router({
       path: '/xuyujie',
       name: 'XuyujieIndex',
       component: XuyujieIndex
+    },
+    {
+      path: '/xuyujie_avg',
+      name: 'XuyujieAvg',
+      component: XuyujieAvg
     },
     {
       path: '/',
