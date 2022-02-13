@@ -102,6 +102,7 @@ export default {
       this.file = item.file
     },
     submitUpload() {
+      this.analysedData = []
       console.log(this.uploadFileList)
       var that = this
 
@@ -121,13 +122,12 @@ export default {
           console.log(error)
         })
       });
-
+      this.openEnsureWindow()
     },
     getAnalyseResult(fileName) {
       Http.get(Apis.XUYUJIE.GET_ANALYSE_TABLE_FORM_TXT_FILE.replace("{fileName}", fileName)).then(res => {
-        this.analysedData = res.data
+        this.analysedData.push(res.data)
         this.hideLoading()
-        this.openEnsureWindow()
       }).catch(error => {
         console.log(error)
         this.hideLoading()
@@ -138,15 +138,16 @@ export default {
       that.showLoading(that.loadingInserting)
       this.analysedData.forEach(function (item,index,arr){
         item.userName = that.uploadUserName
+        Http.post(Apis.XUYUJIE.SAVE_ANALYSE_TABLE_FORM_TXT_FILE, item).then(res => {
+          console.log(res)
+          this.success("文件上传成功")
+          this.hideLoading()
+        }).catch(error => {
+          console.log(error)
+          this.hideLoading()
+        })
       })
-      Http.post(Apis.XUYUJIE.SAVE_ANALYSE_TABLE_FORM_TXT_FILE, this.analysedData).then(res => {
-        console.log(res)
-        this.success("文件上传成功")
-        this.hideLoading()
-      }).catch(error => {
-        console.log(error)
-        this.hideLoading()
-      })
+
     },
     handleRemove(file, fileList) {
       console.log(file)
