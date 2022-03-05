@@ -69,7 +69,7 @@
                 <el-table-column v-for="(item) in labelList" :command="item" :key="item"
                                  :label="string(item)"
                                  width="80">
-                  <template slot-scope="scope">{{ scope.row.dataList[item] }}</template>
+                  <template slot-scope="scope">{{ scope.row.dataList[item-1] }}</template>
                 </el-table-column>
               </el-table>
             </div>
